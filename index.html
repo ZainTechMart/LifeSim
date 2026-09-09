@@ -8,186 +8,248 @@
   content="width=device-width, initial-scale=1.0"
 >
 
-<title>LifeSim</title>
+<title>LifeSim - Your Life. Your Choices.</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
 *{
   box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 body{
-  margin:0;
-  min-height:100vh;
-  background:#0b1020;
-  color:white;
   font-family:Arial,sans-serif;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.container{
-  width:92%;
-  max-width:520px;
-  text-align:center;
-  padding:25px 15px;
-}
-
-.logo{
-  font-size:52px;
-  font-weight:bold;
-  margin-bottom:8px;
-}
-
-.tagline{
-  color:#aab3c7;
-  margin-bottom:35px;
-}
-
-.card{
-  background:#151c30;
-  border:1px solid #293450;
-  border-radius:22px;
-  padding:28px 20px;
-}
-
-h2{
-  margin-top:0;
-}
-
-.description{
-  color:#9da7bd;
-  line-height:1.6;
+  background:#0f172a;
+  color:#fff;
+  min-height:100vh;
 }
 
 button{
-  width:100%;
-  padding:15px;
-  margin-top:20px;
   border:0;
-  border-radius:12px;
-  background:white;
-  color:#0b1020;
-  font-size:17px;
-  font-weight:bold;
+  border-radius:10px;
+  padding:12px 18px;
   cursor:pointer;
-}
-
-button:disabled{
-  opacity:.55;
-  cursor:not-allowed;
+  font-size:15px;
+  font-weight:bold;
 }
 
 input,
 select{
   width:100%;
-  padding:14px;
-  margin-top:12px;
-  border-radius:10px;
-  border:1px solid #303b59;
-  background:#0f1628;
-  color:white;
-  font-size:16px;
-  outline:none;
-}
-
-input:focus,
-select:focus{
-  border-color:#667eea;
-}
-
-.features{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:20px;
-}
-
-.feature{
-  background:#10172a;
-  border-radius:12px;
-  padding:13px 4px;
-  font-size:13px;
-  color:#c5ccda;
-}
-
-.icon{
-  display:block;
-  font-size:22px;
-  margin-bottom:6px;
-}
-
-.footer{
-  margin-top:22px;
-  color:#667087;
-  font-size:12px;
-}
-
-.back{
-  background:#252e45;
-  color:white;
-}
-
-.smallButton{
-  background:#252e45;
-  color:white;
-  font-size:14px;
   padding:12px;
+  margin:7px 0 12px;
+  border:1px solid #334155;
+  border-radius:9px;
+  background:#1e293b;
+  color:#fff;
+  font-size:15px;
 }
 
-.message{
-  margin-top:15px;
-  color:#aab3c7;
-  font-size:14px;
+.container{
+  width:100%;
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
+.card{
+  background:#1e293b;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:18px;
+  box-shadow:0 8px 25px rgba(0,0,0,.2);
+}
+
+h1{
+  font-size:34px;
+  margin-bottom:8px;
+}
+
+h2{
+  margin-bottom:15px;
+}
+
+h3{
+  margin-bottom:8px;
+}
+
+p{
+  color:#cbd5e1;
   line-height:1.5;
 }
 
-.error{
-  color:#ff8c8c;
+.center{
+  text-align:center;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.logo{
+  font-size:38px;
+  font-weight:bold;
+}
+
+.tagline{
+  color:#94a3b8;
+  margin-bottom:25px;
+}
+
+.primary{
+  background:#22c55e;
+  color:#052e16;
+}
+
+.secondary{
+  background:#3b82f6;
+  color:#fff;
+}
+
+.danger{
+  background:#ef4444;
+  color:#fff;
+}
+
+.warning{
+  background:#f59e0b;
+  color:#111827;
+}
+
+.muted{
+  color:#94a3b8;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.stat{
+  background:#0f172a;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.stat-value{
+  font-size:22px;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+.nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.nav button{
+  background:#334155;
+  color:#fff;
+}
+
+.nav button.active{
+  background:#22c55e;
+  color:#052e16;
+}
+
+.jobs,
+.businesses{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.job,
+.business{
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:14px;
+  padding:18px;
+}
+
+.job button,
+.business button{
+  margin-top:12px;
+  width:100%;
+}
+
+.info{
+  background:#172554;
+  border-radius:10px;
+  padding:13px;
+  margin:12px 0;
 }
 
 .success{
-  color:#7ee2a8;
+  color:#4ade80;
 }
 
-.job{
-  background:#10172a;
-  border:1px solid #293450;
-  border-radius:14px;
-  padding:17px;
+.error{
+  color:#f87171;
+}
+
+hr{
+  border:0;
+  border-top:1px solid #334155;
+  margin:18px 0;
+}
+
+.progress{
+  width:100%;
+  height:10px;
+  background:#334155;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.progress-bar{
+  height:100%;
+  background:#22c55e;
+  width:0%;
+}
+
+.message{
   margin-top:12px;
-  text-align:left;
+  min-height:22px;
 }
 
-.jobTitle{
-  font-size:18px;
-  font-weight:bold;
-}
+@media(max-width:700px){
 
-.jobInfo{
-  color:#aab3c7;
-  font-size:13px;
-  margin-top:7px;
-  line-height:1.5;
-}
+  .container{
+    padding:12px;
+  }
 
-.job button{
-  margin-top:13px;
-  padding:11px;
-  font-size:14px;
-}
+  h1{
+    font-size:28px;
+  }
 
-.statBox{
-  background:#10172a;
-  border-radius:14px;
-  padding:16px 5px;
-}
+  .logo{
+    font-size:32px;
+  }
 
-.statValue{
-  font-size:18px;
-  font-weight:bold;
-  margin-top:5px;
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .jobs,
+  .businesses{
+    grid-template-columns:1fr;
+  }
+
+  .nav button{
+    flex:1;
+    min-width:90px;
+  }
+
 }
 
 </style>
@@ -198,67 +260,785 @@ select:focus{
 
 <div class="container">
 
-  <div class="logo">
-    LifeSim
-  </div>
+  <!-- =========================
+       LOGIN
+  ========================== -->
 
-  <div class="tagline">
-    Your Life. Your Choices.
-  </div>
+  <section id="loginScreen">
 
-  <div class="card" id="gameCard">
+    <div class="card center">
 
-    <h2>
-      Welcome to LifeSim
-    </h2>
+      <div class="logo">LifeSim</div>
 
-    <p class="description">
-      Build your own virtual life,
-      make decisions, start a career,
-      build a business and compete
-      with players around the world.
-    </p>
-
-    <button onclick="showAuth('signup')">
-      🚀 Start Your Life
-    </button>
-
-    <button
-      class="back"
-      onclick="showAuth('login')"
-    >
-      🔐 Login
-    </button>
-
-    <div class="features">
-
-      <div class="feature">
-        <span class="icon">👤</span>
-        Create
+      <div class="tagline">
+        Your Life. Your Choices.
       </div>
 
-      <div class="feature">
-        <span class="icon">💰</span>
-        Earn
+      <h2>Welcome</h2>
+
+      <input
+        id="loginEmail"
+        type="email"
+        placeholder="Email"
+      >
+
+      <input
+        id="loginPassword"
+        type="password"
+        placeholder="Password"
+      >
+
+      <button
+        class="primary"
+        onclick="login()"
+      >
+        Login
+      </button>
+
+      <button
+        class="secondary"
+        onclick="showSignup()"
+        style="margin-left:6px;"
+      >
+        Create Account
+      </button>
+
+      <div
+        id="loginMessage"
+        class="message"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       SIGNUP
+  ========================== -->
+
+  <section
+    id="signupScreen"
+    class="hidden"
+  >
+
+    <div class="card center">
+
+      <div class="logo">LifeSim</div>
+
+      <div class="tagline">
+        Start your virtual life.
       </div>
 
-      <div class="feature">
-        <span class="icon">🌍</span>
-        Compete
+      <h2>Create Account</h2>
+
+      <input
+        id="signupEmail"
+        type="email"
+        placeholder="Email"
+      >
+
+      <input
+        id="signupPassword"
+        type="password"
+        placeholder="Password"
+      >
+
+      <button
+        class="primary"
+        onclick="signup()"
+      >
+        Sign Up
+      </button>
+
+      <button
+        class="secondary"
+        onclick="showLogin()"
+        style="margin-left:6px;"
+      >
+        Back to Login
+      </button>
+
+      <div
+        id="signupMessage"
+        class="message"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       CHARACTER CREATION
+  ========================== -->
+
+  <section
+    id="characterScreen"
+    class="hidden"
+  >
+
+    <div class="card">
+
+      <div class="center">
+
+        <div class="logo">LifeSim</div>
+
+        <p>
+          Create your character and begin your journey.
+        </p>
+
+      </div>
+
+      <hr>
+
+      <label>Name</label>
+
+      <input
+        id="playerName"
+        type="text"
+        placeholder="Your character name"
+      >
+
+      <label>Age</label>
+
+      <input
+        id="playerAge"
+        type="number"
+        min="10"
+        max="100"
+        value="18"
+      >
+
+      <label>City</label>
+
+      <select id="playerCity">
+
+        <option value="Islamabad">
+          Islamabad
+        </option>
+
+        <option value="Rawalpindi">
+          Rawalpindi
+        </option>
+
+        <option value="Lahore">
+          Lahore
+        </option>
+
+        <option value="Karachi">
+          Karachi
+        </option>
+
+        <option value="Peshawar">
+          Peshawar
+        </option>
+
+        <option value="Multan">
+          Multan
+        </option>
+
+      </select>
+
+      <label>Life Goal</label>
+
+      <select id="playerGoal">
+
+        <option value="Become Rich">
+          Become Rich
+        </option>
+
+        <option value="Build a Business">
+          Build a Business
+        </option>
+
+        <option value="Become Famous">
+          Become Famous
+        </option>
+
+        <option value="Help People">
+          Help People
+        </option>
+
+        <option value="Become Successful">
+          Become Successful
+        </option>
+
+      </select>
+
+      <button
+        class="primary"
+        onclick="createCharacter()"
+      >
+        Start Life
+      </button>
+
+      <div
+        id="characterMessage"
+        class="message"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       GAME
+  ========================== -->
+
+  <section
+    id="gameScreen"
+    class="hidden"
+  >
+
+    <div class="card">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+
+        <div>
+
+          <div class="logo">
+            LifeSim
+          </div>
+
+          <p id="welcomeText">
+            Welcome
+          </p>
+
+        </div>
+
+        <button
+          class="danger"
+          onclick="logout()"
+        >
+          Logout
+        </button>
+
       </div>
 
     </div>
 
-  </div>
 
-  <div class="footer">
-    LifeSim • Virtual Life Simulator
-  </div>
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <div>💰 Money</div>
+        <div
+          id="money"
+          class="stat-value"
+        >
+          $0
+        </div>
+      </div>
+
+      <div class="stat">
+        <div>😊 Happiness</div>
+        <div
+          id="happiness"
+          class="stat-value"
+        >
+          0
+        </div>
+      </div>
+
+      <div class="stat">
+        <div>⭐ Reputation</div>
+        <div
+          id="reputation"
+          class="stat-value"
+        >
+          0
+        </div>
+      </div>
+
+      <div class="stat">
+        <div>🎂 Age</div>
+        <div
+          id="age"
+          class="stat-value"
+        >
+          0
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- NAV -->
+
+    <div class="nav">
+
+      <button
+        id="navWorld"
+        class="active"
+        onclick="showSection('world')"
+      >
+        🌎 World
+      </button>
+
+      <button
+        id="navCareer"
+        onclick="showSection('career')"
+      >
+        💼 Career
+      </button>
+
+      <button
+        id="navBusiness"
+        onclick="showSection('business')"
+      >
+        🏢 Business
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         WORLD
+    ========================== -->
+
+    <div id="worldSection">
+
+      <div class="card">
+
+        <h2>🌎 Your Life</h2>
+
+        <div class="info">
+
+          <p>
+            <strong>Name:</strong>
+            <span id="worldName"></span>
+          </p>
+
+          <p>
+            <strong>City:</strong>
+            <span id="worldCity"></span>
+          </p>
+
+          <p>
+            <strong>Goal:</strong>
+            <span id="worldGoal"></span>
+          </p>
+
+          <p>
+            <strong>Career:</strong>
+            <span id="worldCareer"></span>
+          </p>
+
+        </div>
+
+        <h3>Life Actions</h3>
+
+        <button
+          class="primary"
+          onclick="rest()"
+        >
+          😴 Rest
+        </button>
+
+        <button
+          class="secondary"
+          onclick="socialize()"
+          style="margin-left:6px;"
+        >
+          🗣️ Socialize
+        </button>
+
+        <div
+          id="worldMessage"
+          class="message"
+        ></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         CAREER
+    ========================== -->
+
+    <div
+      id="careerSection"
+      class="hidden"
+    >
+
+      <div class="card">
+
+        <h2>💼 Career</h2>
+
+        <div class="info">
+
+          <p>
+            Current Career:
+            <strong id="currentCareer">
+              Unemployed
+            </strong>
+          </p>
+
+          <p>
+            Level:
+            <strong id="careerLevel">
+              1
+            </strong>
+          </p>
+
+          <p>
+            Experience:
+            <strong id="experience">
+              0
+            </strong>
+          </p>
+
+          <div class="progress">
+
+            <div
+              id="careerProgress"
+              class="progress-bar"
+            ></div>
+
+          </div>
+
+        </div>
+
+        <div class="jobs">
+
+          <div class="job">
+
+            <h3>💻 Software Developer</h3>
+
+            <p>
+              Salary: $500/work
+            </p>
+
+            <p>
+              XP: +10
+            </p>
+
+            <button
+              class="secondary"
+              onclick="chooseCareer('Software Developer',500,10)"
+            >
+              Choose Career
+            </button>
+
+          </div>
+
+
+          <div class="job">
+
+            <h3>👨‍🏫 Teacher</h3>
+
+            <p>
+              Salary: $300/work
+            </p>
+
+            <p>
+              XP: +8
+            </p>
+
+            <button
+              class="secondary"
+              onclick="chooseCareer('Teacher',300,8)"
+            >
+              Choose Career
+            </button>
+
+          </div>
+
+
+          <div class="job">
+
+            <h3>👨‍⚕️ Doctor</h3>
+
+            <p>
+              Salary: $800/work
+            </p>
+
+            <p>
+              XP: +12
+            </p>
+
+            <button
+              class="secondary"
+              onclick="chooseCareer('Doctor',800,12)"
+            >
+              Choose Career
+            </button>
+
+          </div>
+
+
+          <div class="job">
+
+            <h3>🚕 Taxi Driver</h3>
+
+            <p>
+              Salary: $250/work
+            </p>
+
+            <p>
+              XP: +6
+            </p>
+
+            <button
+              class="secondary"
+              onclick="chooseCareer('Taxi Driver',250,6)"
+            >
+              Choose Career
+            </button>
+
+          </div>
+
+
+          <div class="job">
+
+            <h3>🏪 Shop Worker</h3>
+
+            <p>
+              Salary: $200/work
+            </p>
+
+            <p>
+              XP: +5
+            </p>
+
+            <button
+              class="secondary"
+              onclick="chooseCareer('Shop Worker',200,5)"
+            >
+              Choose Career
+            </button>
+
+          </div>
+
+        </div>
+
+        <div
+          id="careerMessage"
+          class="message"
+        ></div>
+
+        <hr>
+
+        <button
+          class="primary"
+          onclick="work()"
+        >
+          💵 Go To Work
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         BUSINESS
+    ========================== -->
+
+    <div
+      id="businessSection"
+      class="hidden"
+    >
+
+      <div class="card">
+
+        <h2>🏢 Business</h2>
+
+        <div class="info">
+
+          <p>
+            Current Business:
+            <strong id="currentBusiness">
+              None
+            </strong>
+          </p>
+
+          <p>
+            Business Level:
+            <strong id="businessLevel">
+              1
+            </strong>
+          </p>
+
+          <p>
+            Business Value:
+            <strong id="businessValue">
+              $0
+            </strong>
+          </p>
+
+          <p>
+            Income Per Collection:
+            <strong id="businessIncome">
+              $0
+            </strong>
+          </p>
+
+        </div>
+
+
+        <div
+          id="businessActions"
+          class="hidden"
+        >
+
+          <button
+            class="primary"
+            onclick="collectBusinessIncome()"
+          >
+            💰 Collect Business Income
+          </button>
+
+          <button
+            class="warning"
+            onclick="upgradeBusiness()"
+            style="margin-left:6px;"
+          >
+            📈 Upgrade Business
+          </button>
+
+        </div>
+
+        <hr>
+
+
+        <h3>
+          Start a Business
+        </h3>
+
+        <p class="muted">
+          Choose one business. Starting a business replaces your current business.
+        </p>
+
+        <br>
+
+
+        <div class="businesses">
+
+
+          <div class="business">
+
+            <h3>🏪 Small Shop</h3>
+
+            <p>
+              Investment: $2,000
+            </p>
+
+            <p>
+              Income: $250
+            </p>
+
+            <p>
+              Stable beginner business.
+            </p>
+
+            <button
+              class="secondary"
+              onclick="startBusiness('Small Shop',2000,250)"
+            >
+              Start Business
+            </button>
+
+          </div>
+
+
+          <div class="business">
+
+            <h3>🍔 Restaurant</h3>
+
+            <p>
+              Investment: $5,000
+            </p>
+
+            <p>
+              Income: $650
+            </p>
+
+            <p>
+              Higher investment, higher income.
+            </p>
+
+            <button
+              class="secondary"
+              onclick="startBusiness('Restaurant',5000,650)"
+            >
+              Start Business
+            </button>
+
+          </div>
+
+
+          <div class="business">
+
+            <h3>💻 Tech Startup</h3>
+
+            <p>
+              Investment: $10,000
+            </p>
+
+            <p>
+              Income: $1,500
+            </p>
+
+            <p>
+              Risky but powerful business.
+            </p>
+
+            <button
+              class="secondary"
+              onclick="startBusiness('Tech Startup',10000,1500)"
+            >
+              Start Business
+            </button>
+
+          </div>
+
+
+          <div class="business">
+
+            <h3>🏠 Real Estate</h3>
+
+            <p>
+              Investment: $20,000
+            </p>
+
+            <p>
+              Income: $3,000
+            </p>
+
+            <p>
+              Expensive long-term business.
+            </p>
+
+            <button
+              class="secondary"
+              onclick="startBusiness('Real Estate',20000,3000)"
+            >
+              Start Business
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="businessMessage"
+          class="message"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </section>
 
 </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
@@ -281,284 +1061,158 @@ const supabaseClient =
 
 
 /* =========================================================
-   GLOBAL DATA
+   GLOBAL PLAYER
 ========================================================= */
 
-let currentUser = null;
 let currentPlayer = null;
 
 
 /* =========================================================
-   START
+   ELEMENT HELPER
 ========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  async function(){
+function getElement(id){
 
-    const {
-      data: {
-        session
-      }
-    } =
-      await supabaseClient.auth.getSession();
+  return document.getElementById(id);
 
-    if(session){
+}
 
-      currentUser =
-        session.user;
 
-      await loadPlayer();
+/* =========================================================
+   SCREEN HELPERS
+========================================================= */
 
-    }
+function hideAllScreens(){
 
+  getElement("loginScreen")
+    .classList.add("hidden");
+
+  getElement("signupScreen")
+    .classList.add("hidden");
+
+  getElement("characterScreen")
+    .classList.add("hidden");
+
+  getElement("gameScreen")
+    .classList.add("hidden");
+
+}
+
+
+function showLogin(){
+
+  hideAllScreens();
+
+  getElement("loginScreen")
+    .classList.remove("hidden");
+
+}
+
+
+function showSignup(){
+
+  hideAllScreens();
+
+  getElement("signupScreen")
+    .classList.remove("hidden");
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMessage(
+  id,
+  message,
+  success = false
+){
+
+  const el = getElement(id);
+
+  if(!el){
+    return;
   }
-);
 
+  el.textContent = message;
 
-/* =========================================================
-   HOME
-========================================================= */
-
-function showHome(){
-
-  document.getElementById(
-    "gameCard"
-  ).innerHTML = `
-
-    <h2>
-      Welcome to LifeSim
-    </h2>
-
-    <p class="description">
-      Build your own virtual life,
-      make decisions, start a career,
-      build a business and compete
-      with players around the world.
-    </p>
-
-    <button onclick="showAuth('signup')">
-      🚀 Start Your Life
-    </button>
-
-    <button
-      class="back"
-      onclick="showAuth('login')"
-    >
-      🔐 Login
-    </button>
-
-    <div class="features">
-
-      <div class="feature">
-        <span class="icon">👤</span>
-        Create
-      </div>
-
-      <div class="feature">
-        <span class="icon">💰</span>
-        Earn
-      </div>
-
-      <div class="feature">
-        <span class="icon">🌍</span>
-        Compete
-      </div>
-
-    </div>
-
-  `;
+  el.className =
+    success
+      ? "message success"
+      : "message error";
 
 }
 
 
 /* =========================================================
-   AUTH
-========================================================= */
-
-function showAuth(mode){
-
-  const isSignup =
-    mode === "signup";
-
-
-  document.getElementById(
-    "gameCard"
-  ).innerHTML = `
-
-    <h2>
-      ${
-        isSignup
-        ? "🚀 Create Account"
-        : "🔐 Login"
-      }
-    </h2>
-
-    <p class="description">
-      ${
-        isSignup
-        ? "Create your LifeSim account."
-        : "Login to continue your LifeSim journey."
-      }
-    </p>
-
-    <input
-      id="authEmail"
-      type="email"
-      placeholder="Email address"
-    >
-
-    <input
-      id="authPassword"
-      type="password"
-      placeholder="Password"
-    >
-
-    <button
-      id="authButton"
-      onclick="${
-        isSignup
-        ? "signup()"
-        : "login()"
-      }"
-    >
-      ${
-        isSignup
-        ? "✨ Create Account"
-        : "🔓 Login"
-      }
-    </button>
-
-    <div
-      id="authMessage"
-      class="message"
-    ></div>
-
-    <button
-      class="back"
-      onclick="${
-        isSignup
-        ? "showAuth('login')"
-        : "showHome()"
-      }"
-    >
-      ← ${
-        isSignup
-        ? "Login"
-        : "Back"
-      }
-    </button>
-
-  `;
-
-}
-
-
-/* =========================================================
-   SIGNUP
+   SIGN UP
 ========================================================= */
 
 async function signup(){
 
   const email =
-    document.getElementById(
-      "authEmail"
-    ).value.trim();
+    getElement("signupEmail")
+      .value
+      .trim();
 
   const password =
-    document.getElementById(
-      "authPassword"
-    ).value;
-
-  const message =
-    document.getElementById(
-      "authMessage"
-    );
-
-  const button =
-    document.getElementById(
-      "authButton"
-    );
-
+    getElement("signupPassword")
+      .value;
 
   if(!email || !password){
 
-    message.className =
-      "message error";
-
-    message.textContent =
-      "Please enter email and password.";
+    showMessage(
+      "signupMessage",
+      "Email aur password enter karo."
+    );
 
     return;
-  }
 
+  }
 
   if(password.length < 6){
 
-    message.className =
-      "message error";
-
-    message.textContent =
-      "Password must be at least 6 characters.";
+    showMessage(
+      "signupMessage",
+      "Password kam az kam 6 characters ka ho."
+    );
 
     return;
+
   }
 
-
-  button.disabled = true;
-
-  button.textContent =
-    "Creating account...";
-
+  showMessage(
+    "signupMessage",
+    "Account create ho raha hai...",
+    true
+  );
 
   const {
     data,
     error
   } =
     await supabaseClient.auth.signUp({
-
-      email:email,
-
-      password:password
-
+      email,
+      password
     });
-
 
   if(error){
 
-    button.disabled = false;
-
-    button.textContent =
-      "✨ Create Account";
-
-    message.className =
-      "message error";
-
-    message.textContent =
-      error.message;
-
-    return;
-  }
-
-
-  if(data.user){
-
-    currentUser =
-      data.user;
-
-    message.className =
-      "message success";
-
-    message.textContent =
-      "Account created!";
-
-
-    setTimeout(
-      showCharacter,
-      500
+    showMessage(
+      "signupMessage",
+      error.message
     );
 
+    return;
+
   }
+
+  showMessage(
+    "signupMessage",
+    "Account create ho gaya. Login karo.",
+    true
+  );
 
 }
 
@@ -570,167 +1224,52 @@ async function signup(){
 async function login(){
 
   const email =
-    document.getElementById(
-      "authEmail"
-    ).value.trim();
+    getElement("loginEmail")
+      .value
+      .trim();
 
   const password =
-    document.getElementById(
-      "authPassword"
-    ).value;
-
-  const message =
-    document.getElementById(
-      "authMessage"
-    );
-
-  const button =
-    document.getElementById(
-      "authButton"
-    );
-
+    getElement("loginPassword")
+      .value;
 
   if(!email || !password){
 
-    message.className =
-      "message error";
-
-    message.textContent =
-      "Please enter email and password.";
+    showMessage(
+      "loginMessage",
+      "Email aur password enter karo."
+    );
 
     return;
+
   }
 
-
-  button.disabled = true;
-
-  button.textContent =
-    "Logging in...";
-
+  showMessage(
+    "loginMessage",
+    "Login ho raha hai...",
+    true
+  );
 
   const {
     data,
     error
   } =
     await supabaseClient.auth.signInWithPassword({
-
-      email:email,
-
-      password:password
-
+      email,
+      password
     });
-
 
   if(error){
 
-    button.disabled = false;
-
-    button.textContent =
-      "🔓 Login";
-
-    message.className =
-      "message error";
-
-    message.textContent =
-      error.message;
+    showMessage(
+      "loginMessage",
+      error.message
+    );
 
     return;
+
   }
 
-
-  currentUser =
-    data.user;
-
-
   await loadPlayer();
-
-}
-
-
-/* =========================================================
-   CHARACTER
-========================================================= */
-
-function showCharacter(){
-
-  document.getElementById(
-    "gameCard"
-  ).innerHTML = `
-
-    <h2>
-      👤 Create Your Character
-    </h2>
-
-    <p class="description">
-      This is the beginning of your new life.
-    </p>
-
-    <input
-      id="playerName"
-      type="text"
-      placeholder="Your name"
-      maxlength="20"
-    >
-
-    <input
-      id="playerAge"
-      type="number"
-      placeholder="Your age"
-      min="13"
-      max="100"
-    >
-
-    <input
-      id="playerCity"
-      type="text"
-      placeholder="Your city"
-      maxlength="30"
-    >
-
-    <select id="playerGoal">
-
-      <option value="">
-        Choose your life goal
-      </option>
-
-      <option value="business">
-        💼 Become a Business Owner
-      </option>
-
-      <option value="career">
-        🎓 Build a Great Career
-      </option>
-
-      <option value="wealth">
-        💰 Become Rich
-      </option>
-
-      <option value="fame">
-        ⭐ Become Famous
-      </option>
-
-    </select>
-
-    <button
-      id="createButton"
-      onclick="createCharacter()"
-    >
-      ✨ Create Character
-    </button>
-
-    <div
-      id="characterMessage"
-      class="message"
-    ></div>
-
-    <button
-      class="back"
-      onclick="logout()"
-    >
-      🚪 Logout
-    </button>
-
-  `;
 
 }
 
@@ -741,76 +1280,95 @@ function showCharacter(){
 
 async function createCharacter(){
 
-  if(!currentUser){
+  const user =
+    await getCurrentUser();
 
-    showAuth("login");
+  if(!user){
+
+    showLogin();
 
     return;
+
   }
 
-
   const name =
-    document.getElementById(
-      "playerName"
-    ).value.trim();
+    getElement("playerName")
+      .value
+      .trim();
 
   const age =
     parseInt(
-      document.getElementById(
-        "playerAge"
-      ).value
+      getElement("playerAge").value
     );
 
   const city =
-    document.getElementById(
-      "playerCity"
-    ).value.trim();
+    getElement("playerCity").value;
 
   const goal =
-    document.getElementById(
-      "playerGoal"
-    ).value;
+    getElement("playerGoal").value;
 
+  if(!name){
 
-  const message =
-    document.getElementById(
-      "characterMessage"
+    showMessage(
+      "characterMessage",
+      "Character ka name enter karo."
     );
 
-  const button =
-    document.getElementById(
-      "createButton"
+    return;
+
+  }
+
+  if(!age || age < 10 || age > 100){
+
+    showMessage(
+      "characterMessage",
+      "Age 10 se 100 ke darmiyan honi chahiye."
     );
 
-
-  if(!name || !age || !city || !goal){
-
-    message.className =
-      "message error";
-
-    message.textContent =
-      "Please complete all fields.";
-
     return;
+
   }
 
-
-  if(age < 13 || age > 100){
-
-    message.className =
-      "message error";
-
-    message.textContent =
-      "Age must be between 13 and 100.";
-
-    return;
-  }
+  showMessage(
+    "characterMessage",
+    "Character save ho raha hai...",
+    true
+  );
 
 
-  button.disabled = true;
+  const playerData = {
 
-  button.textContent =
-    "Saving...";
+    id:user.id,
+
+    name:name,
+
+    age:age,
+
+    city:city,
+
+    goal:goal,
+
+    money:10000,
+
+    happiness:70,
+
+    reputation:10,
+
+    career:"Unemployed",
+
+    experience:0,
+
+    career_level:1,
+
+    business:"None",
+
+    business_level:1,
+
+    business_value:0,
+
+    business_income:0
+
+  };
 
 
   const {
@@ -819,72 +1377,26 @@ async function createCharacter(){
   } =
     await supabaseClient
       .from("players")
-      .insert({
-
-        id:currentUser.id,
-
-        name:name,
-
-        age:age,
-
-        city:city,
-
-        goal:goal,
-
-        money:10000,
-
-        happiness:70,
-
-        reputation:10,
-
-        career:"Unemployed",
-
-        experience:0,
-
-        career_level:1
-
-      })
+      .insert(playerData)
       .select()
       .single();
 
 
   if(error){
 
-    button.disabled = false;
-
-    button.textContent =
-      "✨ Create Character";
-
-
-    if(error.code === "23505"){
-
-      message.className =
-        "message error";
-
-      message.textContent =
-        "Character already exists.";
-
-      await loadPlayer();
-
-      return;
-    }
-
-
-    message.className =
-      "message error";
-
-    message.textContent =
-      error.message;
+    showMessage(
+      "characterMessage",
+      error.message
+    );
 
     return;
+
   }
 
 
-  currentPlayer =
-    data;
+  currentPlayer = data;
 
-
-  showWelcome();
+  showGame();
 
 }
 
@@ -895,9 +1407,15 @@ async function createCharacter(){
 
 async function loadPlayer(){
 
-  if(!currentUser){
+  const user =
+    await getCurrentUser();
+
+  if(!user){
+
+    showLogin();
 
     return;
+
   }
 
 
@@ -908,31 +1426,206 @@ async function loadPlayer(){
     await supabaseClient
       .from("players")
       .select("*")
-      .eq("id",currentUser.id)
+      .eq("id",user.id)
       .maybeSingle();
 
 
   if(error){
 
-    console.error(
-      "Player load error:",
-      error
+    showMessage(
+      "loginMessage",
+      error.message
     );
 
+    return;
+
+  }
+
+
+  if(!data){
+
+    hideAllScreens();
+
+    getElement("characterScreen")
+      .classList.remove("hidden");
+
+    return;
+
+  }
+
+
+  currentPlayer = data;
+
+  showGame();
+
+}
+
+
+/* =========================================================
+   CURRENT USER
+========================================================= */
+
+async function getCurrentUser(){
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.getUser();
+
+  if(error){
+
+    return null;
+
+  }
+
+  return data.user;
+
+}
+
+
+/* =========================================================
+   SHOW GAME
+========================================================= */
+
+function showGame(){
+
+  hideAllScreens();
+
+  getElement("gameScreen")
+    .classList.remove("hidden");
+
+  updateUI();
+
+  showSection("world");
+
+}
+
+
+/* =========================================================
+   UPDATE UI
+========================================================= */
+
+function updateUI(){
+
+  if(!currentPlayer){
     return;
   }
 
 
-  if(data){
+  getElement("money").textContent =
+    "$" +
+    Number(currentPlayer.money || 0)
+      .toLocaleString();
 
-    currentPlayer =
-      data;
 
-    showWelcome();
+  getElement("happiness").textContent =
+    currentPlayer.happiness ?? 0;
 
-  }else{
 
-    showCharacter();
+  getElement("reputation").textContent =
+    currentPlayer.reputation ?? 0;
+
+
+  getElement("age").textContent =
+    currentPlayer.age ?? 0;
+
+
+  getElement("welcomeText").textContent =
+    "Welcome, " +
+    currentPlayer.name;
+
+
+  getElement("worldName").textContent =
+    currentPlayer.name;
+
+
+  getElement("worldCity").textContent =
+    currentPlayer.city;
+
+
+  getElement("worldGoal").textContent =
+    currentPlayer.goal;
+
+
+  getElement("worldCareer").textContent =
+    currentPlayer.career || "Unemployed";
+
+
+  getElement("currentCareer").textContent =
+    currentPlayer.career || "Unemployed";
+
+
+  getElement("careerLevel").textContent =
+    currentPlayer.career_level || 1;
+
+
+  getElement("experience").textContent =
+    currentPlayer.experience || 0;
+
+
+  updateCareerProgress();
+
+  updateBusinessUI();
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showSection(section){
+
+  getElement("worldSection")
+    .classList.add("hidden");
+
+  getElement("careerSection")
+    .classList.add("hidden");
+
+  getElement("businessSection")
+    .classList.add("hidden");
+
+
+  getElement("navWorld")
+    .classList.remove("active");
+
+  getElement("navCareer")
+    .classList.remove("active");
+
+  getElement("navBusiness")
+    .classList.remove("active");
+
+
+  if(section === "world"){
+
+    getElement("worldSection")
+      .classList.remove("hidden");
+
+    getElement("navWorld")
+      .classList.add("active");
+
+  }
+
+
+  if(section === "career"){
+
+    getElement("careerSection")
+      .classList.remove("hidden");
+
+    getElement("navCareer")
+      .classList.add("active");
+
+  }
+
+
+  if(section === "business"){
+
+    getElement("businessSection")
+      .classList.remove("hidden");
+
+    getElement("navBusiness")
+      .classList.add("active");
 
   }
 
@@ -940,171 +1633,243 @@ async function loadPlayer(){
 
 
 /* =========================================================
-   WELCOME
+   CAREER
 ========================================================= */
 
-function showWelcome(){
+async function chooseCareer(
+  career,
+  salary,
+  xp
+){
 
-  const name =
-    escapeHTML(
-      currentPlayer.name
+  if(!currentPlayer){
+    return;
+  }
+
+
+  currentPlayer.career =
+    career;
+
+  currentPlayer.experience =
+    currentPlayer.experience || 0;
+
+  currentPlayer.career_level =
+    currentPlayer.career_level || 1;
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .update({
+
+        career:career,
+
+        experience:currentPlayer.experience,
+
+        career_level:currentPlayer.career_level
+
+      })
+      .eq("id",currentPlayer.id);
+
+
+  if(error){
+
+    showMessage(
+      "careerMessage",
+      error.message
     );
 
-  const city =
-    escapeHTML(
-      currentPlayer.city
-    );
+    return;
+
+  }
 
 
-  document.getElementById(
-    "gameCard"
-  ).innerHTML = `
+  updateUI();
 
-    <h2>
-      🎉 Welcome, ${name}!
-    </h2>
 
-    <p class="description">
-      Your LifeSim journey has begun.
-    </p>
-
-    <div class="features">
-
-      <div class="feature">
-        <span class="icon">🎂</span>
-        Age<br>
-        ${currentPlayer.age}
-      </div>
-
-      <div class="feature">
-        <span class="icon">📍</span>
-        City<br>
-        ${city}
-      </div>
-
-      <div class="feature">
-        <span class="icon">💰</span>
-        Money<br>
-        $${Number(
-          currentPlayer.money
-        ).toLocaleString()}
-      </div>
-
-    </div>
-
-    <button onclick="enterWorld()">
-      🌍 Enter Your World
-    </button>
-
-    <button
-      class="back"
-      onclick="logout()"
-    >
-      🚪 Logout
-    </button>
-
-  `;
+  showMessage(
+    "careerMessage",
+    "Career select ho gayi: " + career,
+    true
+  );
 
 }
 
 
 /* =========================================================
-   WORLD
+   WORK
 ========================================================= */
 
-function enterWorld(){
+async function work(){
 
-  document.getElementById(
-    "gameCard"
-  ).innerHTML = `
+  if(!currentPlayer){
+    return;
+  }
 
-    <h2>
-      🌍 Your World
-    </h2>
-
-    <p class="description">
-      Your virtual life is ready.
-    </p>
-
-    <div class="features">
-
-      <div class="statBox">
-        <span class="icon">💰</span>
-        Money
-        <div class="statValue">
-          $${Number(
-            currentPlayer.money
-          ).toLocaleString()}
-        </div>
-      </div>
-
-      <div class="statBox">
-        <span class="icon">❤️</span>
-        Happiness
-        <div class="statValue">
-          ${Number(
-            currentPlayer.happiness
-          )}%
-        </div>
-      </div>
-
-      <div class="statBox">
-        <span class="icon">⭐</span>
-        Reputation
-        <div class="statValue">
-          ${Number(
-            currentPlayer.reputation
-          )}
-        </div>
-      </div>
-
-    </div>
-
-    <button onclick="showCareer()">
-      💼 Career
-    </button>
-
-    <button onclick="businessComingSoon()">
-      🏢 Business
-    </button>
-
-    <button onclick="onlineComingSoon()">
-      🌎 Online Players
-    </button>
-
-    <button
-      class="back"
-      onclick="showWelcome()"
-    >
-      ← Back
-    </button>
-
-    <button
-      class="smallButton"
-      onclick="logout()"
-    >
-      🚪 Logout
-    </button>
-
-  `;
-
-}
-
-
-/* =========================================================
-   CAREER SYSTEM
-========================================================= */
-
-function showCareer(){
 
   const career =
-    currentPlayer.career ||
-    "Unemployed";
+    currentPlayer.career;
 
-  const experience =
-    Number(
-      currentPlayer.experience || 0
+
+  if(!career || career === "Unemployed"){
+
+    showMessage(
+      "careerMessage",
+      "Pehle career choose karo."
     );
+
+    return;
+
+  }
+
+
+  const jobs = {
+
+    "Software Developer":{
+      salary:500,
+      xp:10
+    },
+
+    "Teacher":{
+      salary:300,
+      xp:8
+    },
+
+    "Doctor":{
+      salary:800,
+      xp:12
+    },
+
+    "Taxi Driver":{
+      salary:250,
+      xp:6
+    },
+
+    "Shop Worker":{
+      salary:200,
+      xp:5
+    }
+
+  };
+
+
+  const job =
+    jobs[career];
+
+
+  if(!job){
+
+    return;
+
+  }
+
+
+  let money =
+    Number(currentPlayer.money || 0)
+    + job.salary;
+
+
+  let happiness =
+    Math.max(
+      0,
+      Number(currentPlayer.happiness || 0) - 1
+    );
+
+
+  let experience =
+    Number(currentPlayer.experience || 0)
+    + job.xp;
+
+
+  let level =
+    Number(currentPlayer.career_level || 1);
+
+
+  const requiredXP =
+    level * 50;
+
+
+  if(experience >= requiredXP){
+
+    experience -= requiredXP;
+
+    level++;
+
+  }
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .update({
+
+        money:money,
+
+        happiness:happiness,
+
+        experience:experience,
+
+        career_level:level
+
+      })
+      .eq("id",currentPlayer.id);
+
+
+  if(error){
+
+    showMessage(
+      "careerMessage",
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  currentPlayer.money =
+    money;
+
+  currentPlayer.happiness =
+    happiness;
+
+  currentPlayer.experience =
+    experience;
+
+  currentPlayer.career_level =
+    level;
+
+
+  updateUI();
+
+
+  showMessage(
+    "careerMessage",
+    "Work complete! +$" +
+    job.salary +
+    " | +" +
+    job.xp +
+    " XP",
+    true
+  );
+
+}
+
+
+/* =========================================================
+   CAREER PROGRESS
+========================================================= */
+
+function updateCareerProgress(){
+
+  if(!currentPlayer){
+    return;
+  }
+
 
   const level =
     Number(
@@ -1112,416 +1877,86 @@ function showCareer(){
     );
 
 
-  document.getElementById(
-    "gameCard"
-  ).innerHTML = `
-
-    <h2>
-      💼 Career
-    </h2>
-
-    <p class="description">
-      Choose a career and work to earn money.
-    </p>
-
-    <div class="features">
-
-      <div class="statBox">
-        <span class="icon">💼</span>
-        Career
-        <div class="statValue">
-          ${escapeHTML(career)}
-        </div>
-      </div>
-
-      <div class="statBox">
-        <span class="icon">⭐</span>
-        Level
-        <div class="statValue">
-          ${level}
-        </div>
-      </div>
-
-      <div class="statBox">
-        <span class="icon">📈</span>
-        XP
-        <div class="statValue">
-          ${experience}
-        </div>
-      </div>
-
-    </div>
+  const xp =
+    Number(
+      currentPlayer.experience || 0
+    );
 
 
-    <div class="job">
-
-      <div class="jobTitle">
-        🧑‍💻 Software Developer
-      </div>
-
-      <div class="jobInfo">
-        Salary: $500 per work<br>
-        XP: +10
-      </div>
-
-      <button
-        onclick="chooseCareer(
-          'Software Developer',
-          500,
-          10
-        )"
-      >
-        Choose Career
-      </button>
-
-    </div>
+  const required =
+    level * 50;
 
 
-    <div class="job">
-
-      <div class="jobTitle">
-        🧑‍🏫 Teacher
-      </div>
-
-      <div class="jobInfo">
-        Salary: $300 per work<br>
-        XP: +8
-      </div>
-
-      <button
-        onclick="chooseCareer(
-          'Teacher',
-          300,
-          8
-        )"
-      >
-        Choose Career
-      </button>
-
-    </div>
+  const percent =
+    Math.min(
+      100,
+      (xp / required) * 100
+    );
 
 
-    <div class="job">
-
-      <div class="jobTitle">
-        🧑‍⚕️ Doctor
-      </div>
-
-      <div class="jobInfo">
-        Salary: $800 per work<br>
-        XP: +12
-      </div>
-
-      <button
-        onclick="chooseCareer(
-          'Doctor',
-          800,
-          12
-        )"
-      >
-        Choose Career
-      </button>
-
-    </div>
-
-
-    <div class="job">
-
-      <div class="jobTitle">
-        🚕 Taxi Driver
-      </div>
-
-      <div class="jobInfo">
-        Salary: $250 per work<br>
-        XP: +6
-      </div>
-
-      <button
-        onclick="chooseCareer(
-          'Taxi Driver',
-          250,
-          6
-        )"
-      >
-        Choose Career
-      </button>
-
-    </div>
-
-
-    <div class="job">
-
-      <div class="jobTitle">
-        🏪 Shop Worker
-      </div>
-
-      <div class="jobInfo">
-        Salary: $200 per work<br>
-        XP: +5
-      </div>
-
-      <button
-        onclick="chooseCareer(
-          'Shop Worker',
-          200,
-          5
-        )"
-      >
-        Choose Career
-      </button>
-
-    </div>
-
-
-    <button
-      class="back"
-      onclick="enterWorld()"
-    >
-      ← Back To World
-    </button>
-
-  `;
+  getElement("careerProgress")
+    .style.width =
+    percent + "%";
 
 }
 
 
 /* =========================================================
-   CHOOSE CAREER
+   BUSINESS
 ========================================================= */
 
-async function chooseCareer(
-  job,
-  salary,
-  xp
+async function startBusiness(
+  business,
+  cost,
+  income
 ){
 
   if(!currentPlayer){
-
     return;
   }
 
 
-  const newXP =
-    Number(
-      currentPlayer.experience || 0
-    ) + Number(xp);
+  const money =
+    Number(currentPlayer.money || 0);
 
 
-  let newLevel =
-    Number(
-      currentPlayer.career_level || 1
+  if(money < cost){
+
+    showMessage(
+      "businessMessage",
+      "Business start karne ke liye enough money nahi hai."
     );
+
+    return;
+
+  }
 
 
   if(
-    newXP >= newLevel * 50
+    currentPlayer.business &&
+    currentPlayer.business !== "None"
   ){
 
-    newLevel++;
-  }
+    const confirmReplace =
+      confirm(
+        "Tumhare paas already " +
+        currentPlayer.business +
+        " hai. Kya tum is business ko replace karna chahte ho?"
+      );
 
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("players")
-      .update({
+    if(!confirmReplace){
+      return;
+    }
 
-        career:job,
-
-        experience:newXP,
-
-        career_level:newLevel
-
-      })
-      .eq("id",currentUser.id)
-      .select()
-      .single();
-
-
-  if(error){
-
-    alert(
-      "Could not save career: " +
-      error.message
-    );
-
-    return;
-  }
-
-
-  currentPlayer =
-    data;
-
-
-  alert(
-    "Career selected: " +
-    job
-  );
-
-
-  showWorkScreen(
-    job,
-    salary,
-    xp
-  );
-
-}
-
-
-/* =========================================================
-   WORK SCREEN
-========================================================= */
-
-function showWorkScreen(
-  job,
-  salary,
-  xp
-){
-
-  document.getElementById(
-    "gameCard"
-  ).innerHTML = `
-
-    <h2>
-      ${escapeHTML(job)}
-    </h2>
-
-    <p class="description">
-      Work hard and build your career.
-    </p>
-
-    <div class="features">
-
-      <div class="statBox">
-        <span class="icon">💰</span>
-        Salary
-        <div class="statValue">
-          $${salary}
-        </div>
-      </div>
-
-      <div class="statBox">
-        <span class="icon">📈</span>
-        XP
-        <div class="statValue">
-          +${xp}
-        </div>
-      </div>
-
-      <div class="statBox">
-        <span class="icon">⭐</span>
-        Level
-        <div class="statValue">
-          ${currentPlayer.career_level}
-        </div>
-      </div>
-
-    </div>
-
-    <button
-      id="workButton"
-      onclick="workJob(
-        ${salary},
-        ${xp}
-      )"
-    >
-      🕐 Work Now
-    </button>
-
-    <button
-      class="back"
-      onclick="showCareer()"
-    >
-      ← Change Career
-    </button>
-
-    <button
-      class="smallButton"
-      onclick="enterWorld()"
-    >
-      🌍 Back To World
-    </button>
-
-  `;
-
-}
-
-
-/* =========================================================
-   WORK JOB
-========================================================= */
-
-async function workJob(
-  salary,
-  xp
-){
-
-  if(!currentPlayer){
-
-    return;
-  }
-
-
-  const button =
-    document.getElementById(
-      "workButton"
-    );
-
-
-  if(button){
-
-    button.disabled = true;
-
-    button.textContent =
-      "Working...";
   }
 
 
   const newMoney =
-    Number(
-      currentPlayer.money || 0
-    ) + Number(salary);
-
-
-  const newXP =
-    Number(
-      currentPlayer.experience || 0
-    ) + Number(xp);
-
-
-  let newLevel =
-    Number(
-      currentPlayer.career_level || 1
-    );
-
-
-  const requiredXP =
-    newLevel * 50;
-
-
-  if(newXP >= requiredXP){
-
-    newLevel++;
-  }
-
-
-  let newHappiness =
-    Number(
-      currentPlayer.happiness || 70
-    ) - 1;
-
-
-  if(newHappiness < 0){
-
-    newHappiness = 0;
-  }
+    money - cost;
 
 
   const {
-    data,
     error
   } =
     await supabaseClient
@@ -1530,76 +1965,482 @@ async function workJob(
 
         money:newMoney,
 
-        experience:newXP,
+        business:business,
 
-        career_level:newLevel,
+        business_level:1,
 
-        happiness:newHappiness
+        business_value:cost,
+
+        business_income:income
 
       })
-      .eq("id",currentUser.id)
-      .select()
-      .single();
+      .eq("id",currentPlayer.id);
 
 
   if(error){
 
-    if(button){
-
-      button.disabled = false;
-
-      button.textContent =
-        "🕐 Work Now";
-    }
-
-    alert(
-      "Work failed: " +
+    showMessage(
+      "businessMessage",
       error.message
     );
 
     return;
+
   }
 
 
-  currentPlayer =
-    data;
+  currentPlayer.money =
+    newMoney;
+
+  currentPlayer.business =
+    business;
+
+  currentPlayer.business_level =
+    1;
+
+  currentPlayer.business_value =
+    cost;
+
+  currentPlayer.business_income =
+    income;
 
 
-  alert(
-    "💰 You earned $" +
-    salary +
-    " and gained +" +
-    xp +
-    " XP!"
-  );
+  updateUI();
 
 
-  showWorkScreen(
-    currentPlayer.career,
-    salary,
-    xp
+  showMessage(
+    "businessMessage",
+    business +
+    " successfully start ho gaya!",
+    true
   );
 
 }
 
 
 /* =========================================================
-   FUTURE SYSTEMS
+   COLLECT BUSINESS INCOME
 ========================================================= */
 
-function businessComingSoon(){
+async function collectBusinessIncome(){
 
-  alert(
-    "🏢 Business system is coming next!"
+  if(!currentPlayer){
+    return;
+  }
+
+
+  const business =
+    currentPlayer.business;
+
+
+  if(!business || business === "None"){
+
+    showMessage(
+      "businessMessage",
+      "Pehle business start karo."
+    );
+
+    return;
+
+  }
+
+
+  const income =
+    Number(
+      currentPlayer.business_income || 0
+    );
+
+
+  if(income <= 0){
+
+    showMessage(
+      "businessMessage",
+      "Business income available nahi hai."
+    );
+
+    return;
+
+  }
+
+
+  const newMoney =
+    Number(currentPlayer.money || 0)
+    + income;
+
+
+  const newReputation =
+    Number(currentPlayer.reputation || 0)
+    + 1;
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .update({
+
+        money:newMoney,
+
+        reputation:newReputation
+
+      })
+      .eq("id",currentPlayer.id);
+
+
+  if(error){
+
+    showMessage(
+      "businessMessage",
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  currentPlayer.money =
+    newMoney;
+
+  currentPlayer.reputation =
+    newReputation;
+
+
+  updateUI();
+
+
+  showMessage(
+    "businessMessage",
+    "Business income collected: +$" +
+    income,
+    true
   );
 
 }
 
 
-function onlineComingSoon(){
+/* =========================================================
+   UPGRADE BUSINESS
+========================================================= */
 
-  alert(
-    "🌎 Online Players system is coming next!"
+async function upgradeBusiness(){
+
+  if(!currentPlayer){
+    return;
+  }
+
+
+  if(
+    !currentPlayer.business ||
+    currentPlayer.business === "None"
+  ){
+
+    showMessage(
+      "businessMessage",
+      "Pehle business start karo."
+    );
+
+    return;
+
+  }
+
+
+  const level =
+    Number(
+      currentPlayer.business_level || 1
+    );
+
+
+  const currentIncome =
+    Number(
+      currentPlayer.business_income || 0
+    );
+
+
+  const currentValue =
+    Number(
+      currentPlayer.business_value || 0
+    );
+
+
+  const upgradeCost =
+    Math.floor(
+      currentValue * 0.5
+    );
+
+
+  const money =
+    Number(
+      currentPlayer.money || 0
+    );
+
+
+  if(money < upgradeCost){
+
+    showMessage(
+      "businessMessage",
+      "Upgrade ke liye $" +
+      upgradeCost.toLocaleString() +
+      " chahiye."
+    );
+
+    return;
+
+  }
+
+
+  const newLevel =
+    level + 1;
+
+
+  const newIncome =
+    Math.floor(
+      currentIncome * 1.5
+    );
+
+
+  const newValue =
+    currentValue + upgradeCost;
+
+
+  const newMoney =
+    money - upgradeCost;
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .update({
+
+        money:newMoney,
+
+        business_level:newLevel,
+
+        business_value:newValue,
+
+        business_income:newIncome
+
+      })
+      .eq("id",currentPlayer.id);
+
+
+  if(error){
+
+    showMessage(
+      "businessMessage",
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  currentPlayer.money =
+    newMoney;
+
+  currentPlayer.business_level =
+    newLevel;
+
+  currentPlayer.business_value =
+    newValue;
+
+  currentPlayer.business_income =
+    newIncome;
+
+
+  updateUI();
+
+
+  showMessage(
+    "businessMessage",
+    "Business upgraded to Level " +
+    newLevel +
+    "! Income ab $" +
+    newIncome.toLocaleString() +
+    " hai.",
+    true
+  );
+
+}
+
+
+/* =========================================================
+   BUSINESS UI
+========================================================= */
+
+function updateBusinessUI(){
+
+  if(!currentPlayer){
+    return;
+  }
+
+
+  getElement("currentBusiness")
+    .textContent =
+    currentPlayer.business || "None";
+
+
+  getElement("businessLevel")
+    .textContent =
+    currentPlayer.business_level || 1;
+
+
+  getElement("businessValue")
+    .textContent =
+    "$" +
+    Number(
+      currentPlayer.business_value || 0
+    ).toLocaleString();
+
+
+  getElement("businessIncome")
+    .textContent =
+    "$" +
+    Number(
+      currentPlayer.business_income || 0
+    ).toLocaleString();
+
+
+  const actions =
+    getElement("businessActions");
+
+
+  if(
+    currentPlayer.business &&
+    currentPlayer.business !== "None"
+  ){
+
+    actions.classList.remove("hidden");
+
+  }else{
+
+    actions.classList.add("hidden");
+
+  }
+
+}
+
+
+/* =========================================================
+   WORLD ACTIONS
+========================================================= */
+
+async function rest(){
+
+  if(!currentPlayer){
+    return;
+  }
+
+
+  const happiness =
+    Math.min(
+      100,
+      Number(currentPlayer.happiness || 0) + 5
+    );
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .update({
+        happiness:happiness
+      })
+      .eq("id",currentPlayer.id);
+
+
+  if(error){
+
+    showMessage(
+      "worldMessage",
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  currentPlayer.happiness =
+    happiness;
+
+
+  updateUI();
+
+
+  showMessage(
+    "worldMessage",
+    "You rested. Happiness +5 😊",
+    true
+  );
+
+}
+
+
+async function socialize(){
+
+  if(!currentPlayer){
+    return;
+  }
+
+
+  const happiness =
+    Math.min(
+      100,
+      Number(currentPlayer.happiness || 0) + 3
+    );
+
+
+  const reputation =
+    Number(currentPlayer.reputation || 0) + 1;
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .update({
+
+        happiness:happiness,
+
+        reputation:reputation
+
+      })
+      .eq("id",currentPlayer.id);
+
+
+  if(error){
+
+    showMessage(
+      "worldMessage",
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  currentPlayer.happiness =
+    happiness;
+
+  currentPlayer.reputation =
+    reputation;
+
+
+  updateUI();
+
+
+  showMessage(
+    "worldMessage",
+    "You socialized! Happiness +3, Reputation +1.",
+    true
   );
 
 }
@@ -1613,46 +2454,56 @@ async function logout(){
 
   await supabaseClient.auth.signOut();
 
-  currentUser =
-    null;
+  currentPlayer = null;
 
-  currentPlayer =
-    null;
-
-  showHome();
+  showLogin();
 
 }
 
 
 /* =========================================================
-   HTML SAFETY
+   AUTH STATE
 ========================================================= */
 
-function escapeHTML(value){
+supabaseClient.auth.onAuthStateChange(
+  async (event,session)=>{
 
-  return String(value)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    if(event === "SIGNED_IN" && session){
+
+      await loadPlayer();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   START APP
+========================================================= */
+
+async function startGame(){
+
+  const {
+    data
+  } =
+    await supabaseClient.auth.getSession();
+
+
+  if(data.session){
+
+    await loadPlayer();
+
+  }else{
+
+    showLogin();
+
+  }
 
 }
+
+
+startGame();
 
 </script>
 
