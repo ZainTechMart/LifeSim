@@ -3,7 +3,10 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>LifeSim</title>
 
@@ -72,7 +75,7 @@ button{
 }
 
 button:disabled{
-  opacity:.6;
+  opacity:.55;
   cursor:not-allowed;
 }
 
@@ -148,6 +151,33 @@ select:focus{
   color:#7ee2a8;
 }
 
+.job{
+  background:#10172a;
+  border:1px solid #293450;
+  border-radius:14px;
+  padding:17px;
+  margin-top:12px;
+  text-align:left;
+}
+
+.jobTitle{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.jobInfo{
+  color:#aab3c7;
+  font-size:13px;
+  margin-top:7px;
+  line-height:1.5;
+}
+
+.job button{
+  margin-top:13px;
+  padding:11px;
+  font-size:14px;
+}
+
 .statBox{
   background:#10172a;
   border-radius:14px;
@@ -158,10 +188,6 @@ select:focus{
   font-size:18px;
   font-weight:bold;
   margin-top:5px;
-}
-
-.loading{
-  opacity:.7;
 }
 
 </style>
@@ -197,7 +223,10 @@ select:focus{
       🚀 Start Your Life
     </button>
 
-    <button class="back" onclick="showAuth('login')">
+    <button
+      class="back"
+      onclick="showAuth('login')"
+    >
       🔐 Login
     </button>
 
@@ -228,8 +257,6 @@ select:focus{
 
 </div>
 
-
-<!-- Supabase -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -265,23 +292,28 @@ let currentPlayer = null;
    START
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", async function(){
+document.addEventListener(
+  "DOMContentLoaded",
+  async function(){
 
-  const {
-    data: {
-      session
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabaseClient.auth.getSession();
+
+    if(session){
+
+      currentUser =
+        session.user;
+
+      await loadPlayer();
+
     }
-  } = await supabaseClient.auth.getSession();
-
-  if(session){
-
-    currentUser = session.user;
-
-    await loadPlayer();
 
   }
-
-});
+);
 
 
 /* =========================================================
@@ -290,7 +322,9 @@ document.addEventListener("DOMContentLoaded", async function(){
 
 function showHome(){
 
-  document.getElementById("gameCard").innerHTML = `
+  document.getElementById(
+    "gameCard"
+  ).innerHTML = `
 
     <h2>
       Welcome to LifeSim
@@ -307,7 +341,10 @@ function showHome(){
       🚀 Start Your Life
     </button>
 
-    <button class="back" onclick="showAuth('login')">
+    <button
+      class="back"
+      onclick="showAuth('login')"
+    >
       🔐 Login
     </button>
 
@@ -336,7 +373,7 @@ function showHome(){
 
 
 /* =========================================================
-   AUTH SCREEN
+   AUTH
 ========================================================= */
 
 function showAuth(mode){
@@ -344,16 +381,23 @@ function showAuth(mode){
   const isSignup =
     mode === "signup";
 
-  document.getElementById("gameCard").innerHTML = `
+
+  document.getElementById(
+    "gameCard"
+  ).innerHTML = `
 
     <h2>
-      ${isSignup ? "🚀 Create Account" : "🔐 Login"}
+      ${
+        isSignup
+        ? "🚀 Create Account"
+        : "🔐 Login"
+      }
     </h2>
 
     <p class="description">
       ${
         isSignup
-        ? "Create your LifeSim account and start your virtual life."
+        ? "Create your LifeSim account."
         : "Login to continue your LifeSim journey."
       }
     </p>
@@ -362,21 +406,27 @@ function showAuth(mode){
       id="authEmail"
       type="email"
       placeholder="Email address"
-      autocomplete="email"
     >
 
     <input
       id="authPassword"
       type="password"
       placeholder="Password"
-      autocomplete="${isSignup ? "new-password" : "current-password"}"
     >
 
     <button
       id="authButton"
-      onclick="${isSignup ? "signup()" : "login()"}"
+      onclick="${
+        isSignup
+        ? "signup()"
+        : "login()"
+      }"
     >
-      ${isSignup ? "✨ Create Account" : "🔓 Login"}
+      ${
+        isSignup
+        ? "✨ Create Account"
+        : "🔓 Login"
+      }
     </button>
 
     <div
@@ -386,9 +436,17 @@ function showAuth(mode){
 
     <button
       class="back"
-      onclick="${isSignup ? "showAuth('login')" : "showHome()"}"
+      onclick="${
+        isSignup
+        ? "showAuth('login')"
+        : "showHome()"
+      }"
     >
-      ← ${isSignup ? "Already have an account? Login" : "Back"}
+      ← ${
+        isSignup
+        ? "Login"
+        : "Back"
+      }
     </button>
 
   `;
@@ -397,23 +455,30 @@ function showAuth(mode){
 
 
 /* =========================================================
-   SIGN UP
+   SIGNUP
 ========================================================= */
 
 async function signup(){
 
   const email =
-    document.getElementById("authEmail").value
-      .trim();
+    document.getElementById(
+      "authEmail"
+    ).value.trim();
 
   const password =
-    document.getElementById("authPassword").value;
+    document.getElementById(
+      "authPassword"
+    ).value;
 
   const message =
-    document.getElementById("authMessage");
+    document.getElementById(
+      "authMessage"
+    );
 
   const button =
-    document.getElementById("authButton");
+    document.getElementById(
+      "authButton"
+    );
 
 
   if(!email || !password){
@@ -422,7 +487,7 @@ async function signup(){
       "message error";
 
     message.textContent =
-      "Please enter your email and password.";
+      "Please enter email and password.";
 
     return;
   }
@@ -449,13 +514,14 @@ async function signup(){
   const {
     data,
     error
-  } = await supabaseClient.auth.signUp({
+  } =
+    await supabaseClient.auth.signUp({
 
-    email: email,
+      email:email,
 
-    password: password
+      password:password
 
-  });
+    });
 
 
   if(error){
@@ -484,14 +550,13 @@ async function signup(){
       "message success";
 
     message.textContent =
-      "Account created successfully!";
+      "Account created!";
 
 
-    setTimeout(function(){
-
-      showCharacter();
-
-    },500);
+    setTimeout(
+      showCharacter,
+      500
+    );
 
   }
 
@@ -505,17 +570,24 @@ async function signup(){
 async function login(){
 
   const email =
-    document.getElementById("authEmail").value
-      .trim();
+    document.getElementById(
+      "authEmail"
+    ).value.trim();
 
   const password =
-    document.getElementById("authPassword").value;
+    document.getElementById(
+      "authPassword"
+    ).value;
 
   const message =
-    document.getElementById("authMessage");
+    document.getElementById(
+      "authMessage"
+    );
 
   const button =
-    document.getElementById("authButton");
+    document.getElementById(
+      "authButton"
+    );
 
 
   if(!email || !password){
@@ -524,7 +596,7 @@ async function login(){
       "message error";
 
     message.textContent =
-      "Please enter your email and password.";
+      "Please enter email and password.";
 
     return;
   }
@@ -542,9 +614,9 @@ async function login(){
   } =
     await supabaseClient.auth.signInWithPassword({
 
-      email: email,
+      email:email,
 
-      password: password
+      password:password
 
     });
 
@@ -576,12 +648,14 @@ async function login(){
 
 
 /* =========================================================
-   CHARACTER CREATION
+   CHARACTER
 ========================================================= */
 
 function showCharacter(){
 
-  document.getElementById("gameCard").innerHTML = `
+  document.getElementById(
+    "gameCard"
+  ).innerHTML = `
 
     <h2>
       👤 Create Your Character
@@ -662,14 +736,12 @@ function showCharacter(){
 
 
 /* =========================================================
-   CREATE CHARACTER + SAVE TO SUPABASE
+   CREATE CHARACTER
 ========================================================= */
 
 async function createCharacter(){
 
   if(!currentUser){
-
-    alert("Please login first.");
 
     showAuth("login");
 
@@ -678,29 +750,37 @@ async function createCharacter(){
 
 
   const name =
-    document.getElementById("playerName")
-      .value.trim();
+    document.getElementById(
+      "playerName"
+    ).value.trim();
 
   const age =
     parseInt(
-      document.getElementById("playerAge")
-        .value
+      document.getElementById(
+        "playerAge"
+      ).value
     );
 
   const city =
-    document.getElementById("playerCity")
-      .value.trim();
+    document.getElementById(
+      "playerCity"
+    ).value.trim();
 
   const goal =
-    document.getElementById("playerGoal")
-      .value;
+    document.getElementById(
+      "playerGoal"
+    ).value;
 
 
   const message =
-    document.getElementById("characterMessage");
+    document.getElementById(
+      "characterMessage"
+    );
 
   const button =
-    document.getElementById("createButton");
+    document.getElementById(
+      "createButton"
+    );
 
 
   if(!name || !age || !city || !goal){
@@ -730,7 +810,7 @@ async function createCharacter(){
   button.disabled = true;
 
   button.textContent =
-    "Saving your life...";
+    "Saving...";
 
 
   const {
@@ -741,15 +821,27 @@ async function createCharacter(){
       .from("players")
       .insert({
 
-        id: currentUser.id,
+        id:currentUser.id,
 
-        name: name,
+        name:name,
 
-        age: age,
+        age:age,
 
-        city: city,
+        city:city,
 
-        goal: goal
+        goal:goal,
+
+        money:10000,
+
+        happiness:70,
+
+        reputation:10,
+
+        career:"Unemployed",
+
+        experience:0,
+
+        career_level:1
 
       })
       .select()
@@ -770,12 +862,11 @@ async function createCharacter(){
         "message error";
 
       message.textContent =
-        "This account already has a character.";
+        "Character already exists.";
 
       await loadPlayer();
 
       return;
-
     }
 
 
@@ -799,7 +890,7 @@ async function createCharacter(){
 
 
 /* =========================================================
-   LOAD PLAYER FROM SUPABASE
+   LOAD PLAYER
 ========================================================= */
 
 async function loadPlayer(){
@@ -817,7 +908,7 @@ async function loadPlayer(){
     await supabaseClient
       .from("players")
       .select("*")
-      .eq("id", currentUser.id)
+      .eq("id",currentUser.id)
       .maybeSingle();
 
 
@@ -854,26 +945,23 @@ async function loadPlayer(){
 
 function showWelcome(){
 
-  if(!currentPlayer){
+  const name =
+    escapeHTML(
+      currentPlayer.name
+    );
 
-    return;
-  }
-
-
-  const safeName =
-    escapeHTML(currentPlayer.name);
-
-  const safeCity =
-    escapeHTML(currentPlayer.city);
-
-  const safeAge =
-    escapeHTML(String(currentPlayer.age));
+  const city =
+    escapeHTML(
+      currentPlayer.city
+    );
 
 
-  document.getElementById("gameCard").innerHTML = `
+  document.getElementById(
+    "gameCard"
+  ).innerHTML = `
 
     <h2>
-      🎉 Welcome, ${safeName}!
+      🎉 Welcome, ${name}!
     </h2>
 
     <p class="description">
@@ -884,17 +972,22 @@ function showWelcome(){
 
       <div class="feature">
         <span class="icon">🎂</span>
-        Age<br>${safeAge}
+        Age<br>
+        ${currentPlayer.age}
       </div>
 
       <div class="feature">
         <span class="icon">📍</span>
-        City<br>${safeCity}
+        City<br>
+        ${city}
       </div>
 
       <div class="feature">
         <span class="icon">💰</span>
-        Money<br>$${Number(currentPlayer.money).toLocaleString()}
+        Money<br>
+        $${Number(
+          currentPlayer.money
+        ).toLocaleString()}
       </div>
 
     </div>
@@ -916,25 +1009,20 @@ function showWelcome(){
 
 
 /* =========================================================
-   ENTER WORLD
+   WORLD
 ========================================================= */
 
 function enterWorld(){
 
-  if(!currentPlayer){
-
-    return;
-  }
-
-
-  document.getElementById("gameCard").innerHTML = `
+  document.getElementById(
+    "gameCard"
+  ).innerHTML = `
 
     <h2>
       🌍 Your World
     </h2>
 
     <p class="description">
-      Welcome to LifeSim.
       Your virtual life is ready.
     </p>
 
@@ -944,7 +1032,9 @@ function enterWorld(){
         <span class="icon">💰</span>
         Money
         <div class="statValue">
-          $${Number(currentPlayer.money).toLocaleString()}
+          $${Number(
+            currentPlayer.money
+          ).toLocaleString()}
         </div>
       </div>
 
@@ -952,7 +1042,9 @@ function enterWorld(){
         <span class="icon">❤️</span>
         Happiness
         <div class="statValue">
-          ${Number(currentPlayer.happiness)}%
+          ${Number(
+            currentPlayer.happiness
+          )}%
         </div>
       </div>
 
@@ -960,13 +1052,15 @@ function enterWorld(){
         <span class="icon">⭐</span>
         Reputation
         <div class="statValue">
-          ${Number(currentPlayer.reputation)}
+          ${Number(
+            currentPlayer.reputation
+          )}
         </div>
       </div>
 
     </div>
 
-    <button onclick="careerComingSoon()">
+    <button onclick="showCareer()">
       💼 Career
     </button>
 
@@ -998,17 +1092,500 @@ function enterWorld(){
 
 
 /* =========================================================
-   FUTURE SYSTEMS
+   CAREER SYSTEM
 ========================================================= */
 
-function careerComingSoon(){
+function showCareer(){
+
+  const career =
+    currentPlayer.career ||
+    "Unemployed";
+
+  const experience =
+    Number(
+      currentPlayer.experience || 0
+    );
+
+  const level =
+    Number(
+      currentPlayer.career_level || 1
+    );
+
+
+  document.getElementById(
+    "gameCard"
+  ).innerHTML = `
+
+    <h2>
+      💼 Career
+    </h2>
+
+    <p class="description">
+      Choose a career and work to earn money.
+    </p>
+
+    <div class="features">
+
+      <div class="statBox">
+        <span class="icon">💼</span>
+        Career
+        <div class="statValue">
+          ${escapeHTML(career)}
+        </div>
+      </div>
+
+      <div class="statBox">
+        <span class="icon">⭐</span>
+        Level
+        <div class="statValue">
+          ${level}
+        </div>
+      </div>
+
+      <div class="statBox">
+        <span class="icon">📈</span>
+        XP
+        <div class="statValue">
+          ${experience}
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="job">
+
+      <div class="jobTitle">
+        🧑‍💻 Software Developer
+      </div>
+
+      <div class="jobInfo">
+        Salary: $500 per work<br>
+        XP: +10
+      </div>
+
+      <button
+        onclick="chooseCareer(
+          'Software Developer',
+          500,
+          10
+        )"
+      >
+        Choose Career
+      </button>
+
+    </div>
+
+
+    <div class="job">
+
+      <div class="jobTitle">
+        🧑‍🏫 Teacher
+      </div>
+
+      <div class="jobInfo">
+        Salary: $300 per work<br>
+        XP: +8
+      </div>
+
+      <button
+        onclick="chooseCareer(
+          'Teacher',
+          300,
+          8
+        )"
+      >
+        Choose Career
+      </button>
+
+    </div>
+
+
+    <div class="job">
+
+      <div class="jobTitle">
+        🧑‍⚕️ Doctor
+      </div>
+
+      <div class="jobInfo">
+        Salary: $800 per work<br>
+        XP: +12
+      </div>
+
+      <button
+        onclick="chooseCareer(
+          'Doctor',
+          800,
+          12
+        )"
+      >
+        Choose Career
+      </button>
+
+    </div>
+
+
+    <div class="job">
+
+      <div class="jobTitle">
+        🚕 Taxi Driver
+      </div>
+
+      <div class="jobInfo">
+        Salary: $250 per work<br>
+        XP: +6
+      </div>
+
+      <button
+        onclick="chooseCareer(
+          'Taxi Driver',
+          250,
+          6
+        )"
+      >
+        Choose Career
+      </button>
+
+    </div>
+
+
+    <div class="job">
+
+      <div class="jobTitle">
+        🏪 Shop Worker
+      </div>
+
+      <div class="jobInfo">
+        Salary: $200 per work<br>
+        XP: +5
+      </div>
+
+      <button
+        onclick="chooseCareer(
+          'Shop Worker',
+          200,
+          5
+        )"
+      >
+        Choose Career
+      </button>
+
+    </div>
+
+
+    <button
+      class="back"
+      onclick="enterWorld()"
+    >
+      ← Back To World
+    </button>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CHOOSE CAREER
+========================================================= */
+
+async function chooseCareer(
+  job,
+  salary,
+  xp
+){
+
+  if(!currentPlayer){
+
+    return;
+  }
+
+
+  const newXP =
+    Number(
+      currentPlayer.experience || 0
+    ) + Number(xp);
+
+
+  let newLevel =
+    Number(
+      currentPlayer.career_level || 1
+    );
+
+
+  if(
+    newXP >= newLevel * 50
+  ){
+
+    newLevel++;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .update({
+
+        career:job,
+
+        experience:newXP,
+
+        career_level:newLevel
+
+      })
+      .eq("id",currentUser.id)
+      .select()
+      .single();
+
+
+  if(error){
+
+    alert(
+      "Could not save career: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  currentPlayer =
+    data;
+
 
   alert(
-    "💼 Career system is coming next!"
+    "Career selected: " +
+    job
+  );
+
+
+  showWorkScreen(
+    job,
+    salary,
+    xp
   );
 
 }
 
+
+/* =========================================================
+   WORK SCREEN
+========================================================= */
+
+function showWorkScreen(
+  job,
+  salary,
+  xp
+){
+
+  document.getElementById(
+    "gameCard"
+  ).innerHTML = `
+
+    <h2>
+      ${escapeHTML(job)}
+    </h2>
+
+    <p class="description">
+      Work hard and build your career.
+    </p>
+
+    <div class="features">
+
+      <div class="statBox">
+        <span class="icon">💰</span>
+        Salary
+        <div class="statValue">
+          $${salary}
+        </div>
+      </div>
+
+      <div class="statBox">
+        <span class="icon">📈</span>
+        XP
+        <div class="statValue">
+          +${xp}
+        </div>
+      </div>
+
+      <div class="statBox">
+        <span class="icon">⭐</span>
+        Level
+        <div class="statValue">
+          ${currentPlayer.career_level}
+        </div>
+      </div>
+
+    </div>
+
+    <button
+      id="workButton"
+      onclick="workJob(
+        ${salary},
+        ${xp}
+      )"
+    >
+      🕐 Work Now
+    </button>
+
+    <button
+      class="back"
+      onclick="showCareer()"
+    >
+      ← Change Career
+    </button>
+
+    <button
+      class="smallButton"
+      onclick="enterWorld()"
+    >
+      🌍 Back To World
+    </button>
+
+  `;
+
+}
+
+
+/* =========================================================
+   WORK JOB
+========================================================= */
+
+async function workJob(
+  salary,
+  xp
+){
+
+  if(!currentPlayer){
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      "workButton"
+    );
+
+
+  if(button){
+
+    button.disabled = true;
+
+    button.textContent =
+      "Working...";
+  }
+
+
+  const newMoney =
+    Number(
+      currentPlayer.money || 0
+    ) + Number(salary);
+
+
+  const newXP =
+    Number(
+      currentPlayer.experience || 0
+    ) + Number(xp);
+
+
+  let newLevel =
+    Number(
+      currentPlayer.career_level || 1
+    );
+
+
+  const requiredXP =
+    newLevel * 50;
+
+
+  if(newXP >= requiredXP){
+
+    newLevel++;
+  }
+
+
+  let newHappiness =
+    Number(
+      currentPlayer.happiness || 70
+    ) - 1;
+
+
+  if(newHappiness < 0){
+
+    newHappiness = 0;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .update({
+
+        money:newMoney,
+
+        experience:newXP,
+
+        career_level:newLevel,
+
+        happiness:newHappiness
+
+      })
+      .eq("id",currentUser.id)
+      .select()
+      .single();
+
+
+  if(error){
+
+    if(button){
+
+      button.disabled = false;
+
+      button.textContent =
+        "🕐 Work Now";
+    }
+
+    alert(
+      "Work failed: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  currentPlayer =
+    data;
+
+
+  alert(
+    "💰 You earned $" +
+    salary +
+    " and gained +" +
+    xp +
+    " XP!"
+  );
+
+
+  showWorkScreen(
+    currentPlayer.career,
+    salary,
+    xp
+  );
+
+}
+
+
+/* =========================================================
+   FUTURE SYSTEMS
+========================================================= */
 
 function businessComingSoon(){
 
@@ -1054,11 +1631,26 @@ async function logout(){
 function escapeHTML(value){
 
   return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
