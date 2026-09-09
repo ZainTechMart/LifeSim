@@ -3,6 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0"
@@ -63,24 +64,6 @@ select{
   box-shadow:0 8px 25px rgba(0,0,0,.2);
 }
 
-h1{
-  font-size:34px;
-  margin-bottom:8px;
-}
-
-h2{
-  margin-bottom:15px;
-}
-
-h3{
-  margin-bottom:8px;
-}
-
-p{
-  color:#cbd5e1;
-  line-height:1.5;
-}
-
 .center{
   text-align:center;
 }
@@ -97,6 +80,24 @@ p{
 .tagline{
   color:#94a3b8;
   margin-bottom:25px;
+}
+
+h1{
+  font-size:34px;
+  margin-bottom:8px;
+}
+
+h2{
+  margin-bottom:15px;
+}
+
+h3{
+  margin-bottom:8px;
+}
+
+p{
+  color:#cbd5e1;
+  line-height:1.5;
 }
 
 .primary{
@@ -121,6 +122,19 @@ p{
 
 .muted{
   color:#94a3b8;
+}
+
+.success{
+  color:#4ade80;
+}
+
+.error{
+  color:#f87171;
+}
+
+.message{
+  margin-top:12px;
+  min-height:22px;
 }
 
 .stats{
@@ -161,14 +175,16 @@ p{
 }
 
 .jobs,
-.businesses{
+.businesses,
+.players{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:15px;
 }
 
 .job,
-.business{
+.business,
+.player{
   background:#0f172a;
   border:1px solid #334155;
   border-radius:14px;
@@ -188,20 +204,6 @@ p{
   margin:12px 0;
 }
 
-.success{
-  color:#4ade80;
-}
-
-.error{
-  color:#f87171;
-}
-
-hr{
-  border:0;
-  border-top:1px solid #334155;
-  margin:18px 0;
-}
-
 .progress{
   width:100%;
   height:10px;
@@ -217,19 +219,58 @@ hr{
   width:0%;
 }
 
-.message{
-  margin-top:12px;
-  min-height:22px;
+.online-dot{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  background:#22c55e;
+  border-radius:50%;
+  margin-right:6px;
+}
+
+.offline-dot{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  background:#64748b;
+  border-radius:50%;
+  margin-right:6px;
+}
+
+.player-name{
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.player-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:5px 0;
+  color:#cbd5e1;
+}
+
+.player-row strong{
+  color:#fff;
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:#94a3b8;
+}
+
+hr{
+  border:0;
+  border-top:1px solid #334155;
+  margin:18px 0;
 }
 
 @media(max-width:700px){
 
   .container{
     padding:12px;
-  }
-
-  h1{
-    font-size:28px;
   }
 
   .logo{
@@ -241,7 +282,8 @@ hr{
   }
 
   .jobs,
-  .businesses{
+  .businesses,
+  .players{
     grid-template-columns:1fr;
   }
 
@@ -260,783 +302,870 @@ hr{
 
 <div class="container">
 
-  <!-- =========================
-       LOGIN
-  ========================== -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
-  <section id="loginScreen">
+<section id="loginScreen">
 
-    <div class="card center">
+  <div class="card center">
+
+    <div class="logo">LifeSim</div>
+
+    <div class="tagline">
+      Your Life. Your Choices.
+    </div>
+
+    <h2>Welcome</h2>
+
+    <input
+      id="loginEmail"
+      type="email"
+      placeholder="Email"
+    >
+
+    <input
+      id="loginPassword"
+      type="password"
+      placeholder="Password"
+    >
+
+    <button
+      class="primary"
+      onclick="login()"
+    >
+      Login
+    </button>
+
+    <button
+      class="secondary"
+      onclick="showSignup()"
+      style="margin-left:6px;"
+    >
+      Create Account
+    </button>
+
+    <div
+      id="loginMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     SIGNUP
+===================================================== -->
+
+<section
+  id="signupScreen"
+  class="hidden"
+>
+
+  <div class="card center">
+
+    <div class="logo">LifeSim</div>
+
+    <div class="tagline">
+      Start your virtual life.
+    </div>
+
+    <h2>Create Account</h2>
+
+    <input
+      id="signupEmail"
+      type="email"
+      placeholder="Email"
+    >
+
+    <input
+      id="signupPassword"
+      type="password"
+      placeholder="Password"
+    >
+
+    <button
+      class="primary"
+      onclick="signup()"
+    >
+      Sign Up
+    </button>
+
+    <button
+      class="secondary"
+      onclick="showLogin()"
+      style="margin-left:6px;"
+    >
+      Back to Login
+    </button>
+
+    <div
+      id="signupMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     CHARACTER
+===================================================== -->
+
+<section
+  id="characterScreen"
+  class="hidden"
+>
+
+  <div class="card">
+
+    <div class="center">
 
       <div class="logo">LifeSim</div>
 
-      <div class="tagline">
-        Your Life. Your Choices.
-      </div>
-
-      <h2>Welcome</h2>
-
-      <input
-        id="loginEmail"
-        type="email"
-        placeholder="Email"
-      >
-
-      <input
-        id="loginPassword"
-        type="password"
-        placeholder="Password"
-      >
-
-      <button
-        class="primary"
-        onclick="login()"
-      >
-        Login
-      </button>
-
-      <button
-        class="secondary"
-        onclick="showSignup()"
-        style="margin-left:6px;"
-      >
-        Create Account
-      </button>
-
-      <div
-        id="loginMessage"
-        class="message"
-      ></div>
+      <p>
+        Create your character and begin your journey.
+      </p>
 
     </div>
 
-  </section>
+    <hr>
+
+    <label>Name</label>
+
+    <input
+      id="playerName"
+      type="text"
+      placeholder="Your character name"
+    >
+
+    <label>Age</label>
+
+    <input
+      id="playerAge"
+      type="number"
+      min="10"
+      max="100"
+      value="18"
+    >
+
+    <label>City</label>
+
+    <select id="playerCity">
+
+      <option value="Islamabad">
+        Islamabad
+      </option>
+
+      <option value="Rawalpindi">
+        Rawalpindi
+      </option>
+
+      <option value="Lahore">
+        Lahore
+      </option>
+
+      <option value="Karachi">
+        Karachi
+      </option>
+
+      <option value="Peshawar">
+        Peshawar
+      </option>
+
+      <option value="Multan">
+        Multan
+      </option>
+
+    </select>
+
+    <label>Life Goal</label>
+
+    <select id="playerGoal">
+
+      <option value="Become Rich">
+        Become Rich
+      </option>
+
+      <option value="Build a Business">
+        Build a Business
+      </option>
+
+      <option value="Become Famous">
+        Become Famous
+      </option>
+
+      <option value="Help People">
+        Help People
+      </option>
+
+      <option value="Become Successful">
+        Become Successful
+      </option>
+
+    </select>
+
+    <button
+      class="primary"
+      onclick="createCharacter()"
+    >
+      Start Life
+    </button>
+
+    <div
+      id="characterMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+</section>
 
 
-  <!-- =========================
-       SIGNUP
-  ========================== -->
+<!-- =====================================================
+     GAME
+===================================================== -->
 
-  <section
-    id="signupScreen"
-    class="hidden"
-  >
+<section
+  id="gameScreen"
+  class="hidden"
+>
 
-    <div class="card center">
+  <div class="card">
 
-      <div class="logo">LifeSim</div>
+    <div
+      style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+        flex-wrap:wrap;
+      "
+    >
 
-      <div class="tagline">
-        Start your virtual life.
-      </div>
+      <div>
 
-      <h2>Create Account</h2>
+        <div class="logo">
+          LifeSim
+        </div>
 
-      <input
-        id="signupEmail"
-        type="email"
-        placeholder="Email"
-      >
-
-      <input
-        id="signupPassword"
-        type="password"
-        placeholder="Password"
-      >
-
-      <button
-        class="primary"
-        onclick="signup()"
-      >
-        Sign Up
-      </button>
-
-      <button
-        class="secondary"
-        onclick="showLogin()"
-        style="margin-left:6px;"
-      >
-        Back to Login
-      </button>
-
-      <div
-        id="signupMessage"
-        class="message"
-      ></div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       CHARACTER CREATION
-  ========================== -->
-
-  <section
-    id="characterScreen"
-    class="hidden"
-  >
-
-    <div class="card">
-
-      <div class="center">
-
-        <div class="logo">LifeSim</div>
-
-        <p>
-          Create your character and begin your journey.
+        <p id="welcomeText">
+          Welcome
         </p>
 
       </div>
 
-      <hr>
-
-      <label>Name</label>
-
-      <input
-        id="playerName"
-        type="text"
-        placeholder="Your character name"
-      >
-
-      <label>Age</label>
-
-      <input
-        id="playerAge"
-        type="number"
-        min="10"
-        max="100"
-        value="18"
-      >
-
-      <label>City</label>
-
-      <select id="playerCity">
-
-        <option value="Islamabad">
-          Islamabad
-        </option>
-
-        <option value="Rawalpindi">
-          Rawalpindi
-        </option>
-
-        <option value="Lahore">
-          Lahore
-        </option>
-
-        <option value="Karachi">
-          Karachi
-        </option>
-
-        <option value="Peshawar">
-          Peshawar
-        </option>
-
-        <option value="Multan">
-          Multan
-        </option>
-
-      </select>
-
-      <label>Life Goal</label>
-
-      <select id="playerGoal">
-
-        <option value="Become Rich">
-          Become Rich
-        </option>
-
-        <option value="Build a Business">
-          Build a Business
-        </option>
-
-        <option value="Become Famous">
-          Become Famous
-        </option>
-
-        <option value="Help People">
-          Help People
-        </option>
-
-        <option value="Become Successful">
-          Become Successful
-        </option>
-
-      </select>
-
       <button
-        class="primary"
-        onclick="createCharacter()"
+        class="danger"
+        onclick="logout()"
       >
-        Start Life
+        Logout
       </button>
-
-      <div
-        id="characterMessage"
-        class="message"
-      ></div>
 
     </div>
 
-  </section>
+  </div>
 
 
-  <!-- =========================
-       GAME
-  ========================== -->
+<!-- STATS -->
 
-  <section
-    id="gameScreen"
-    class="hidden"
+<div class="stats">
+
+  <div class="stat">
+
+    <div>💰 Money</div>
+
+    <div
+      id="money"
+      class="stat-value"
+    >
+      $0
+    </div>
+
+  </div>
+
+  <div class="stat">
+
+    <div>😊 Happiness</div>
+
+    <div
+      id="happiness"
+      class="stat-value"
+    >
+      0
+    </div>
+
+  </div>
+
+  <div class="stat">
+
+    <div>⭐ Reputation</div>
+
+    <div
+      id="reputation"
+      class="stat-value"
+    >
+      0
+    </div>
+
+  </div>
+
+  <div class="stat">
+
+    <div>🎂 Age</div>
+
+    <div
+      id="age"
+      class="stat-value"
+    >
+      0
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- NAV -->
+
+<div class="nav">
+
+  <button
+    id="navWorld"
+    class="active"
+    onclick="showSection('world')"
   >
+    🌎 World
+  </button>
 
-    <div class="card">
+  <button
+    id="navCareer"
+    onclick="showSection('career')"
+  >
+    💼 Career
+  </button>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+  <button
+    id="navBusiness"
+    onclick="showSection('business')"
+  >
+    🏢 Business
+  </button>
 
-        <div>
+  <button
+    id="navPlayers"
+    onclick="showSection('players')"
+  >
+    👥 Players
+  </button>
 
-          <div class="logo">
-            LifeSim
-          </div>
+</div>
 
-          <p id="welcomeText">
-            Welcome
-          </p>
 
-        </div>
+<!-- =====================================================
+     WORLD
+===================================================== -->
 
-        <button
-          class="danger"
-          onclick="logout()"
-        >
-          Logout
-        </button>
+<div id="worldSection">
+
+  <div class="card">
+
+    <h2>🌎 Your Life</h2>
+
+    <div class="info">
+
+      <p>
+        <strong>Name:</strong>
+        <span id="worldName"></span>
+      </p>
+
+      <p>
+        <strong>City:</strong>
+        <span id="worldCity"></span>
+      </p>
+
+      <p>
+        <strong>Goal:</strong>
+        <span id="worldGoal"></span>
+      </p>
+
+      <p>
+        <strong>Career:</strong>
+        <span id="worldCareer"></span>
+      </p>
+
+      <p>
+        <strong>Business:</strong>
+        <span id="worldBusiness"></span>
+      </p>
+
+    </div>
+
+    <h3>Life Actions</h3>
+
+    <button
+      class="primary"
+      onclick="rest()"
+    >
+      😴 Rest
+    </button>
+
+    <button
+      class="secondary"
+      onclick="socialize()"
+      style="margin-left:6px;"
+    >
+      🗣️ Socialize
+    </button>
+
+    <div
+      id="worldMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     CAREER
+===================================================== -->
+
+<div
+  id="careerSection"
+  class="hidden"
+>
+
+  <div class="card">
+
+    <h2>💼 Career</h2>
+
+    <div class="info">
+
+      <p>
+        Current Career:
+        <strong id="currentCareer">
+          Unemployed
+        </strong>
+      </p>
+
+      <p>
+        Level:
+        <strong id="careerLevel">
+          1
+        </strong>
+      </p>
+
+      <p>
+        Experience:
+        <strong id="experience">
+          0
+        </strong>
+      </p>
+
+      <div class="progress">
+
+        <div
+          id="careerProgress"
+          class="progress-bar"
+        ></div>
 
       </div>
 
     </div>
 
+    <div class="jobs">
 
-    <!-- STATS -->
+      <div class="job">
 
-    <div class="stats">
+        <h3>💻 Software Developer</h3>
 
-      <div class="stat">
-        <div>💰 Money</div>
-        <div
-          id="money"
-          class="stat-value"
-        >
-          $0
-        </div>
-      </div>
-
-      <div class="stat">
-        <div>😊 Happiness</div>
-        <div
-          id="happiness"
-          class="stat-value"
-        >
-          0
-        </div>
-      </div>
-
-      <div class="stat">
-        <div>⭐ Reputation</div>
-        <div
-          id="reputation"
-          class="stat-value"
-        >
-          0
-        </div>
-      </div>
-
-      <div class="stat">
-        <div>🎂 Age</div>
-        <div
-          id="age"
-          class="stat-value"
-        >
-          0
-        </div>
-      </div>
-
-    </div>
-
-
-    <!-- NAV -->
-
-    <div class="nav">
-
-      <button
-        id="navWorld"
-        class="active"
-        onclick="showSection('world')"
-      >
-        🌎 World
-      </button>
-
-      <button
-        id="navCareer"
-        onclick="showSection('career')"
-      >
-        💼 Career
-      </button>
-
-      <button
-        id="navBusiness"
-        onclick="showSection('business')"
-      >
-        🏢 Business
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         WORLD
-    ========================== -->
-
-    <div id="worldSection">
-
-      <div class="card">
-
-        <h2>🌎 Your Life</h2>
-
-        <div class="info">
-
-          <p>
-            <strong>Name:</strong>
-            <span id="worldName"></span>
-          </p>
-
-          <p>
-            <strong>City:</strong>
-            <span id="worldCity"></span>
-          </p>
-
-          <p>
-            <strong>Goal:</strong>
-            <span id="worldGoal"></span>
-          </p>
-
-          <p>
-            <strong>Career:</strong>
-            <span id="worldCareer"></span>
-          </p>
-
-        </div>
-
-        <h3>Life Actions</h3>
-
-        <button
-          class="primary"
-          onclick="rest()"
-        >
-          😴 Rest
-        </button>
+        <p>Salary: $500/work</p>
+        <p>XP: +10</p>
 
         <button
           class="secondary"
-          onclick="socialize()"
-          style="margin-left:6px;"
+          onclick="
+            chooseCareer(
+              'Software Developer',
+              500,
+              10
+            )
+          "
         >
-          🗣️ Socialize
+          Choose Career
         </button>
-
-        <div
-          id="worldMessage"
-          class="message"
-        ></div>
 
       </div>
 
-    </div>
 
+      <div class="job">
 
-    <!-- =========================
-         CAREER
-    ========================== -->
+        <h3>👨‍🏫 Teacher</h3>
 
-    <div
-      id="careerSection"
-      class="hidden"
-    >
-
-      <div class="card">
-
-        <h2>💼 Career</h2>
-
-        <div class="info">
-
-          <p>
-            Current Career:
-            <strong id="currentCareer">
-              Unemployed
-            </strong>
-          </p>
-
-          <p>
-            Level:
-            <strong id="careerLevel">
-              1
-            </strong>
-          </p>
-
-          <p>
-            Experience:
-            <strong id="experience">
-              0
-            </strong>
-          </p>
-
-          <div class="progress">
-
-            <div
-              id="careerProgress"
-              class="progress-bar"
-            ></div>
-
-          </div>
-
-        </div>
-
-        <div class="jobs">
-
-          <div class="job">
-
-            <h3>💻 Software Developer</h3>
-
-            <p>
-              Salary: $500/work
-            </p>
-
-            <p>
-              XP: +10
-            </p>
-
-            <button
-              class="secondary"
-              onclick="chooseCareer('Software Developer',500,10)"
-            >
-              Choose Career
-            </button>
-
-          </div>
-
-
-          <div class="job">
-
-            <h3>👨‍🏫 Teacher</h3>
-
-            <p>
-              Salary: $300/work
-            </p>
-
-            <p>
-              XP: +8
-            </p>
-
-            <button
-              class="secondary"
-              onclick="chooseCareer('Teacher',300,8)"
-            >
-              Choose Career
-            </button>
-
-          </div>
-
-
-          <div class="job">
-
-            <h3>👨‍⚕️ Doctor</h3>
-
-            <p>
-              Salary: $800/work
-            </p>
-
-            <p>
-              XP: +12
-            </p>
-
-            <button
-              class="secondary"
-              onclick="chooseCareer('Doctor',800,12)"
-            >
-              Choose Career
-            </button>
-
-          </div>
-
-
-          <div class="job">
-
-            <h3>🚕 Taxi Driver</h3>
-
-            <p>
-              Salary: $250/work
-            </p>
-
-            <p>
-              XP: +6
-            </p>
-
-            <button
-              class="secondary"
-              onclick="chooseCareer('Taxi Driver',250,6)"
-            >
-              Choose Career
-            </button>
-
-          </div>
-
-
-          <div class="job">
-
-            <h3>🏪 Shop Worker</h3>
-
-            <p>
-              Salary: $200/work
-            </p>
-
-            <p>
-              XP: +5
-            </p>
-
-            <button
-              class="secondary"
-              onclick="chooseCareer('Shop Worker',200,5)"
-            >
-              Choose Career
-            </button>
-
-          </div>
-
-        </div>
-
-        <div
-          id="careerMessage"
-          class="message"
-        ></div>
-
-        <hr>
+        <p>Salary: $300/work</p>
+        <p>XP: +8</p>
 
         <button
-          class="primary"
-          onclick="work()"
+          class="secondary"
+          onclick="
+            chooseCareer(
+              'Teacher',
+              300,
+              8
+            )
+          "
         >
-          💵 Go To Work
+          Choose Career
+        </button>
+
+      </div>
+
+
+      <div class="job">
+
+        <h3>👨‍⚕️ Doctor</h3>
+
+        <p>Salary: $800/work</p>
+        <p>XP: +12</p>
+
+        <button
+          class="secondary"
+          onclick="
+            chooseCareer(
+              'Doctor',
+              800,
+              12
+            )
+          "
+        >
+          Choose Career
+        </button>
+
+      </div>
+
+
+      <div class="job">
+
+        <h3>🚕 Taxi Driver</h3>
+
+        <p>Salary: $250/work</p>
+        <p>XP: +6</p>
+
+        <button
+          class="secondary"
+          onclick="
+            chooseCareer(
+              'Taxi Driver',
+              250,
+              6
+            )
+          "
+        >
+          Choose Career
+        </button>
+
+      </div>
+
+
+      <div class="job">
+
+        <h3>🏪 Shop Worker</h3>
+
+        <p>Salary: $200/work</p>
+        <p>XP: +5</p>
+
+        <button
+          class="secondary"
+          onclick="
+            chooseCareer(
+              'Shop Worker',
+              200,
+              5
+            )
+          "
+        >
+          Choose Career
         </button>
 
       </div>
 
     </div>
 
+    <div
+      id="careerMessage"
+      class="message"
+    ></div>
 
-    <!-- =========================
-         BUSINESS
-    ========================== -->
+    <hr>
+
+    <button
+      class="primary"
+      onclick="work()"
+    >
+      💵 Go To Work
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     BUSINESS
+===================================================== -->
+
+<div
+  id="businessSection"
+  class="hidden"
+>
+
+  <div class="card">
+
+    <h2>🏢 Business</h2>
+
+    <div class="info">
+
+      <p>
+        Current Business:
+        <strong id="currentBusiness">
+          None
+        </strong>
+      </p>
+
+      <p>
+        Business Level:
+        <strong id="businessLevel">
+          1
+        </strong>
+      </p>
+
+      <p>
+        Business Value:
+        <strong id="businessValue">
+          $0
+        </strong>
+      </p>
+
+      <p>
+        Income Per Collection:
+        <strong id="businessIncome">
+          $0
+        </strong>
+      </p>
+
+    </div>
 
     <div
-      id="businessSection"
+      id="businessActions"
       class="hidden"
     >
 
-      <div class="card">
+      <button
+        class="primary"
+        onclick="collectBusinessIncome()"
+      >
+        💰 Collect Business Income
+      </button>
 
-        <h2>🏢 Business</h2>
+      <button
+        class="warning"
+        onclick="upgradeBusiness()"
+        style="margin-left:6px;"
+      >
+        📈 Upgrade Business
+      </button>
 
-        <div class="info">
+    </div>
 
-          <p>
-            Current Business:
-            <strong id="currentBusiness">
-              None
-            </strong>
-          </p>
+    <hr>
 
-          <p>
-            Business Level:
-            <strong id="businessLevel">
-              1
-            </strong>
-          </p>
+    <h3>
+      Start a Business
+    </h3>
 
-          <p>
-            Business Value:
-            <strong id="businessValue">
-              $0
-            </strong>
-          </p>
+    <p class="muted">
+      Choose a business and grow your virtual empire.
+    </p>
 
-          <p>
-            Income Per Collection:
-            <strong id="businessIncome">
-              $0
-            </strong>
-          </p>
+    <br>
 
-        </div>
+    <div class="businesses">
 
+      <div class="business">
 
-        <div
-          id="businessActions"
-          class="hidden"
+        <h3>🏪 Small Shop</h3>
+
+        <p>Investment: $2,000</p>
+        <p>Income: $250</p>
+        <p>Beginner friendly.</p>
+
+        <button
+          class="secondary"
+          onclick="
+            startBusiness(
+              'Small Shop',
+              2000,
+              250
+            )
+          "
         >
+          Start Business
+        </button>
 
-          <button
-            class="primary"
-            onclick="collectBusinessIncome()"
-          >
-            💰 Collect Business Income
-          </button>
-
-          <button
-            class="warning"
-            onclick="upgradeBusiness()"
-            style="margin-left:6px;"
-          >
-            📈 Upgrade Business
-          </button>
-
-        </div>
-
-        <hr>
+      </div>
 
 
-        <h3>
-          Start a Business
-        </h3>
+      <div class="business">
 
-        <p class="muted">
-          Choose one business. Starting a business replaces your current business.
-        </p>
+        <h3>🍔 Restaurant</h3>
 
-        <br>
+        <p>Investment: $5,000</p>
+        <p>Income: $650</p>
+        <p>Higher investment.</p>
 
+        <button
+          class="secondary"
+          onclick="
+            startBusiness(
+              'Restaurant',
+              5000,
+              650
+            )
+          "
+        >
+          Start Business
+        </button>
 
-        <div class="businesses">
-
-
-          <div class="business">
-
-            <h3>🏪 Small Shop</h3>
-
-            <p>
-              Investment: $2,000
-            </p>
-
-            <p>
-              Income: $250
-            </p>
-
-            <p>
-              Stable beginner business.
-            </p>
-
-            <button
-              class="secondary"
-              onclick="startBusiness('Small Shop',2000,250)"
-            >
-              Start Business
-            </button>
-
-          </div>
+      </div>
 
 
-          <div class="business">
+      <div class="business">
 
-            <h3>🍔 Restaurant</h3>
+        <h3>💻 Tech Startup</h3>
 
-            <p>
-              Investment: $5,000
-            </p>
+        <p>Investment: $10,000</p>
+        <p>Income: $1,500</p>
+        <p>High growth potential.</p>
 
-            <p>
-              Income: $650
-            </p>
+        <button
+          class="secondary"
+          onclick="
+            startBusiness(
+              'Tech Startup',
+              10000,
+              1500
+            )
+          "
+        >
+          Start Business
+        </button>
 
-            <p>
-              Higher investment, higher income.
-            </p>
-
-            <button
-              class="secondary"
-              onclick="startBusiness('Restaurant',5000,650)"
-            >
-              Start Business
-            </button>
-
-          </div>
+      </div>
 
 
-          <div class="business">
+      <div class="business">
 
-            <h3>💻 Tech Startup</h3>
+        <h3>🏠 Real Estate</h3>
 
-            <p>
-              Investment: $10,000
-            </p>
+        <p>Investment: $20,000</p>
+        <p>Income: $3,000</p>
+        <p>Long-term investment.</p>
 
-            <p>
-              Income: $1,500
-            </p>
-
-            <p>
-              Risky but powerful business.
-            </p>
-
-            <button
-              class="secondary"
-              onclick="startBusiness('Tech Startup',10000,1500)"
-            >
-              Start Business
-            </button>
-
-          </div>
-
-
-          <div class="business">
-
-            <h3>🏠 Real Estate</h3>
-
-            <p>
-              Investment: $20,000
-            </p>
-
-            <p>
-              Income: $3,000
-            </p>
-
-            <p>
-              Expensive long-term business.
-            </p>
-
-            <button
-              class="secondary"
-              onclick="startBusiness('Real Estate',20000,3000)"
-            >
-              Start Business
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div
-          id="businessMessage"
-          class="message"
-        ></div>
+        <button
+          class="secondary"
+          onclick="
+            startBusiness(
+              'Real Estate',
+              20000,
+              3000
+            )
+          "
+        >
+          Start Business
+        </button>
 
       </div>
 
     </div>
 
-  </section>
+    <div
+      id="businessMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     ONLINE PLAYERS
+===================================================== -->
+
+<div
+  id="playersSection"
+  class="hidden"
+>
+
+  <div class="card">
+
+    <div
+      style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+        flex-wrap:wrap;
+      "
+    >
+
+      <div>
+
+        <h2>👥 Online Players</h2>
+
+        <p>
+          LifeSim world mein doosre players.
+        </p>
+
+      </div>
+
+      <button
+        class="secondary"
+        onclick="loadOnlinePlayers()"
+      >
+        🔄 Refresh
+      </button>
+
+    </div>
+
+    <hr>
+
+    <div
+      id="playersList"
+      class="players"
+    >
+
+      <div class="empty">
+        Players load ho rahe hain...
+      </div>
+
+    </div>
+
+    <div
+      id="playersMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+</div>
+
+</section>
 
 </div>
 
@@ -1061,14 +1190,16 @@ const supabaseClient =
 
 
 /* =========================================================
-   GLOBAL PLAYER
+   GLOBAL
 ========================================================= */
 
 let currentPlayer = null;
 
+let presenceTimer = null;
+
 
 /* =========================================================
-   ELEMENT HELPER
+   HELPER
 ========================================================= */
 
 function getElement(id){
@@ -1077,10 +1208,6 @@ function getElement(id){
 
 }
 
-
-/* =========================================================
-   SCREEN HELPERS
-========================================================= */
 
 function hideAllScreens(){
 
@@ -1119,23 +1246,21 @@ function showSignup(){
 }
 
 
-/* =========================================================
-   MESSAGE
-========================================================= */
-
 function showMessage(
   id,
   message,
-  success = false
+  success=false
 ){
 
-  const el = getElement(id);
+  const el =
+    getElement(id);
 
   if(!el){
     return;
   }
 
-  el.textContent = message;
+  el.textContent =
+    message;
 
   el.className =
     success
@@ -1146,7 +1271,7 @@ function showMessage(
 
 
 /* =========================================================
-   SIGN UP
+   SIGNUP
 ========================================================= */
 
 async function signup(){
@@ -1189,7 +1314,6 @@ async function signup(){
   );
 
   const {
-    data,
     error
   } =
     await supabaseClient.auth.signUp({
@@ -1210,7 +1334,7 @@ async function signup(){
 
   showMessage(
     "signupMessage",
-    "Account create ho gaya. Login karo.",
+    "Account create ho gaya. Ab login karo.",
     true
   );
 
@@ -1250,7 +1374,6 @@ async function login(){
   );
 
   const {
-    data,
     error
   } =
     await supabaseClient.auth.signInWithPassword({
@@ -1270,6 +1393,29 @@ async function login(){
   }
 
   await loadPlayer();
+
+}
+
+
+/* =========================================================
+   CURRENT USER
+========================================================= */
+
+async function getCurrentUser(){
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.getUser();
+
+  if(error){
+
+    return null;
+
+  }
+
+  return data.user;
 
 }
 
@@ -1311,7 +1457,7 @@ async function createCharacter(){
 
     showMessage(
       "characterMessage",
-      "Character ka name enter karo."
+      "Character name enter karo."
     );
 
     return;
@@ -1328,13 +1474,6 @@ async function createCharacter(){
     return;
 
   }
-
-  showMessage(
-    "characterMessage",
-    "Character save ho raha hai...",
-    true
-  );
-
 
   const playerData = {
 
@@ -1394,7 +1533,10 @@ async function createCharacter(){
   }
 
 
-  currentPlayer = data;
+  currentPlayer =
+    data;
+
+  await setOnline();
 
   showGame();
 
@@ -1454,32 +1596,12 @@ async function loadPlayer(){
   }
 
 
-  currentPlayer = data;
+  currentPlayer =
+    data;
+
+  await setOnline();
 
   showGame();
-
-}
-
-
-/* =========================================================
-   CURRENT USER
-========================================================= */
-
-async function getCurrentUser(){
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.getUser();
-
-  if(error){
-
-    return null;
-
-  }
-
-  return data.user;
 
 }
 
@@ -1499,6 +1621,8 @@ function showGame(){
 
   showSection("world");
 
+  startPresenceUpdates();
+
 }
 
 
@@ -1515,8 +1639,9 @@ function updateUI(){
 
   getElement("money").textContent =
     "$" +
-    Number(currentPlayer.money || 0)
-      .toLocaleString();
+    Number(
+      currentPlayer.money || 0
+    ).toLocaleString();
 
 
   getElement("happiness").textContent =
@@ -1549,11 +1674,18 @@ function updateUI(){
 
 
   getElement("worldCareer").textContent =
-    currentPlayer.career || "Unemployed";
+    currentPlayer.career ||
+    "Unemployed";
+
+
+  getElement("worldBusiness").textContent =
+    currentPlayer.business ||
+    "None";
 
 
   getElement("currentCareer").textContent =
-    currentPlayer.career || "Unemployed";
+    currentPlayer.career ||
+    "Unemployed";
 
 
   getElement("careerLevel").textContent =
@@ -1586,6 +1718,9 @@ function showSection(section){
   getElement("businessSection")
     .classList.add("hidden");
 
+  getElement("playersSection")
+    .classList.add("hidden");
+
 
   getElement("navWorld")
     .classList.remove("active");
@@ -1594,6 +1729,9 @@ function showSection(section){
     .classList.remove("active");
 
   getElement("navBusiness")
+    .classList.remove("active");
+
+  getElement("navPlayers")
     .classList.remove("active");
 
 
@@ -1629,6 +1767,19 @@ function showSection(section){
 
   }
 
+
+  if(section === "players"){
+
+    getElement("playersSection")
+      .classList.remove("hidden");
+
+    getElement("navPlayers")
+      .classList.add("active");
+
+    loadOnlinePlayers();
+
+  }
+
 }
 
 
@@ -1647,16 +1798,6 @@ async function chooseCareer(
   }
 
 
-  currentPlayer.career =
-    career;
-
-  currentPlayer.experience =
-    currentPlayer.experience || 0;
-
-  currentPlayer.career_level =
-    currentPlayer.career_level || 1;
-
-
   const {
     error
   } =
@@ -1666,12 +1807,17 @@ async function chooseCareer(
 
         career:career,
 
-        experience:currentPlayer.experience,
+        experience:
+          currentPlayer.experience || 0,
 
-        career_level:currentPlayer.career_level
+        career_level:
+          currentPlayer.career_level || 1
 
       })
-      .eq("id",currentPlayer.id);
+      .eq(
+        "id",
+        currentPlayer.id
+      );
 
 
   if(error){
@@ -1686,12 +1832,17 @@ async function chooseCareer(
   }
 
 
+  currentPlayer.career =
+    career;
+
+
   updateUI();
 
 
   showMessage(
     "careerMessage",
-    "Career select ho gayi: " + career,
+    "Career select ho gayi: " +
+    career,
     true
   );
 
@@ -1706,22 +1857,6 @@ async function work(){
 
   if(!currentPlayer){
     return;
-  }
-
-
-  const career =
-    currentPlayer.career;
-
-
-  if(!career || career === "Unemployed"){
-
-    showMessage(
-      "careerMessage",
-      "Pehle career choose karo."
-    );
-
-    return;
-
   }
 
 
@@ -1756,10 +1891,15 @@ async function work(){
 
 
   const job =
-    jobs[career];
+    jobs[currentPlayer.career];
 
 
   if(!job){
+
+    showMessage(
+      "careerMessage",
+      "Pehle career choose karo."
+    );
 
     return;
 
@@ -1767,24 +1907,32 @@ async function work(){
 
 
   let money =
-    Number(currentPlayer.money || 0)
-    + job.salary;
+    Number(
+      currentPlayer.money || 0
+    ) +
+    job.salary;
 
 
   let happiness =
     Math.max(
       0,
-      Number(currentPlayer.happiness || 0) - 1
+      Number(
+        currentPlayer.happiness || 0
+      ) - 1
     );
 
 
   let experience =
-    Number(currentPlayer.experience || 0)
-    + job.xp;
+    Number(
+      currentPlayer.experience || 0
+    ) +
+    job.xp;
 
 
   let level =
-    Number(currentPlayer.career_level || 1);
+    Number(
+      currentPlayer.career_level || 1
+    );
 
 
   const requiredXP =
@@ -1816,7 +1964,10 @@ async function work(){
         career_level:level
 
       })
-      .eq("id",currentPlayer.id);
+      .eq(
+        "id",
+        currentPlayer.id
+      );
 
 
   if(error){
@@ -1876,16 +2027,13 @@ function updateCareerProgress(){
       currentPlayer.career_level || 1
     );
 
-
   const xp =
     Number(
       currentPlayer.experience || 0
     );
 
-
   const required =
     level * 50;
-
 
   const percent =
     Math.min(
@@ -1917,14 +2065,16 @@ async function startBusiness(
 
 
   const money =
-    Number(currentPlayer.money || 0);
+    Number(
+      currentPlayer.money || 0
+    );
 
 
   if(money < cost){
 
     showMessage(
       "businessMessage",
-      "Business start karne ke liye enough money nahi hai."
+      "Business ke liye enough money nahi hai."
     );
 
     return;
@@ -1937,15 +2087,14 @@ async function startBusiness(
     currentPlayer.business !== "None"
   ){
 
-    const confirmReplace =
+    const replace =
       confirm(
-        "Tumhare paas already " +
+        "Already " +
         currentPlayer.business +
-        " hai. Kya tum is business ko replace karna chahte ho?"
+        " hai. Replace karna hai?"
       );
 
-
-    if(!confirmReplace){
+    if(!replace){
       return;
     }
 
@@ -1974,7 +2123,10 @@ async function startBusiness(
         business_income:income
 
       })
-      .eq("id",currentPlayer.id);
+      .eq(
+        "id",
+        currentPlayer.id
+      );
 
 
   if(error){
@@ -2019,7 +2171,7 @@ async function startBusiness(
 
 
 /* =========================================================
-   COLLECT BUSINESS INCOME
+   COLLECT BUSINESS
 ========================================================= */
 
 async function collectBusinessIncome(){
@@ -2029,11 +2181,10 @@ async function collectBusinessIncome(){
   }
 
 
-  const business =
-    currentPlayer.business;
-
-
-  if(!business || business === "None"){
+  if(
+    !currentPlayer.business ||
+    currentPlayer.business === "None"
+  ){
 
     showMessage(
       "businessMessage",
@@ -2051,26 +2202,18 @@ async function collectBusinessIncome(){
     );
 
 
-  if(income <= 0){
-
-    showMessage(
-      "businessMessage",
-      "Business income available nahi hai."
-    );
-
-    return;
-
-  }
-
-
   const newMoney =
-    Number(currentPlayer.money || 0)
-    + income;
+    Number(
+      currentPlayer.money || 0
+    ) +
+    income;
 
 
   const newReputation =
-    Number(currentPlayer.reputation || 0)
-    + 1;
+    Number(
+      currentPlayer.reputation || 0
+    ) +
+    1;
 
 
   const {
@@ -2085,7 +2228,10 @@ async function collectBusinessIncome(){
         reputation:newReputation
 
       })
-      .eq("id",currentPlayer.id);
+      .eq(
+        "id",
+        currentPlayer.id
+      );
 
 
   if(error){
@@ -2112,8 +2258,8 @@ async function collectBusinessIncome(){
 
   showMessage(
     "businessMessage",
-    "Business income collected: +$" +
-    income,
+    "Income collected: +$" +
+    income.toLocaleString(),
     true
   );
 
@@ -2152,21 +2298,21 @@ async function upgradeBusiness(){
     );
 
 
-  const currentIncome =
+  const income =
     Number(
       currentPlayer.business_income || 0
     );
 
 
-  const currentValue =
+  const value =
     Number(
       currentPlayer.business_value || 0
     );
 
 
-  const upgradeCost =
+  const cost =
     Math.floor(
-      currentValue * 0.5
+      value * 0.5
     );
 
 
@@ -2176,12 +2322,12 @@ async function upgradeBusiness(){
     );
 
 
-  if(money < upgradeCost){
+  if(money < cost){
 
     showMessage(
       "businessMessage",
       "Upgrade ke liye $" +
-      upgradeCost.toLocaleString() +
+      cost.toLocaleString() +
       " chahiye."
     );
 
@@ -2193,19 +2339,16 @@ async function upgradeBusiness(){
   const newLevel =
     level + 1;
 
-
   const newIncome =
     Math.floor(
-      currentIncome * 1.5
+      income * 1.5
     );
 
-
   const newValue =
-    currentValue + upgradeCost;
-
+    value + cost;
 
   const newMoney =
-    money - upgradeCost;
+    money - cost;
 
 
   const {
@@ -2224,7 +2367,10 @@ async function upgradeBusiness(){
         business_income:newIncome
 
       })
-      .eq("id",currentPlayer.id);
+      .eq(
+        "id",
+        currentPlayer.id
+      );
 
 
   if(error){
@@ -2257,11 +2403,9 @@ async function upgradeBusiness(){
 
   showMessage(
     "businessMessage",
-    "Business upgraded to Level " +
+    "Business Level " +
     newLevel +
-    "! Income ab $" +
-    newIncome.toLocaleString() +
-    " hai.",
+    " ho gaya!",
     true
   );
 
@@ -2339,7 +2483,9 @@ async function rest(){
   const happiness =
     Math.min(
       100,
-      Number(currentPlayer.happiness || 0) + 5
+      Number(
+        currentPlayer.happiness || 0
+      ) + 5
     );
 
 
@@ -2351,7 +2497,10 @@ async function rest(){
       .update({
         happiness:happiness
       })
-      .eq("id",currentPlayer.id);
+      .eq(
+        "id",
+        currentPlayer.id
+      );
 
 
   if(error){
@@ -2392,12 +2541,16 @@ async function socialize(){
   const happiness =
     Math.min(
       100,
-      Number(currentPlayer.happiness || 0) + 3
+      Number(
+        currentPlayer.happiness || 0
+      ) + 3
     );
 
 
   const reputation =
-    Number(currentPlayer.reputation || 0) + 1;
+    Number(
+      currentPlayer.reputation || 0
+    ) + 1;
 
 
   const {
@@ -2412,7 +2565,10 @@ async function socialize(){
         reputation:reputation
 
       })
-      .eq("id",currentPlayer.id);
+      .eq(
+        "id",
+        currentPlayer.id
+      );
 
 
   if(error){
@@ -2439,9 +2595,361 @@ async function socialize(){
 
   showMessage(
     "worldMessage",
-    "You socialized! Happiness +3, Reputation +1.",
+    "Happiness +3, Reputation +1.",
     true
   );
+
+}
+
+
+/* =========================================================
+   ONLINE STATUS
+========================================================= */
+
+async function setOnline(){
+
+  if(!currentPlayer){
+    return;
+  }
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("player_presence")
+      .upsert(
+        {
+          player_id:
+            currentPlayer.id,
+
+          is_online:true,
+
+          last_seen:
+            new Date().toISOString()
+        },
+        {
+          onConflict:"player_id"
+        }
+      );
+
+
+  if(error){
+
+    console.log(
+      "Presence error:",
+      error.message
+    );
+
+  }
+
+}
+
+
+async function setOffline(){
+
+  if(!currentPlayer){
+    return;
+  }
+
+
+  await supabaseClient
+    .from("player_presence")
+    .update({
+
+      is_online:false,
+
+      last_seen:
+        new Date().toISOString()
+
+    })
+    .eq(
+      "player_id",
+      currentPlayer.id
+    );
+
+}
+
+
+function startPresenceUpdates(){
+
+  if(presenceTimer){
+
+    clearInterval(
+      presenceTimer
+    );
+
+  }
+
+
+  setOnline();
+
+
+  presenceTimer =
+    setInterval(
+      setOnline,
+      30000
+    );
+
+}
+
+
+/* =========================================================
+   ONLINE PLAYERS
+========================================================= */
+
+async function loadOnlinePlayers(){
+
+  const list =
+    getElement("playersList");
+
+
+  if(!list){
+    return;
+  }
+
+
+  list.innerHTML =
+    `
+      <div class="empty">
+        Players load ho rahe hain...
+      </div>
+    `;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .select(`
+        id,
+        name,
+        age,
+        city,
+        career,
+        career_level,
+        money,
+        reputation,
+        business,
+        business_level,
+        player_presence(
+          is_online,
+          last_seen
+        )
+      `)
+      .order(
+        "money",
+        {
+          ascending:false
+        }
+      );
+
+
+  if(error){
+
+    list.innerHTML =
+      `
+        <div class="empty">
+          Players load nahi ho sake.
+        </div>
+      `;
+
+    showMessage(
+      "playersMessage",
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  if(!data || data.length === 0){
+
+    list.innerHTML =
+      `
+        <div class="empty">
+          Abhi koi player nahi mila.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  const now =
+    Date.now();
+
+
+  const filtered =
+    data.filter(
+      player =>
+        player.id !==
+        currentPlayer?.id
+    );
+
+
+  if(filtered.length === 0){
+
+    list.innerHTML =
+      `
+        <div class="empty">
+          Abhi koi doosra player nahi hai.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    filtered
+      .map(player => {
+
+        let presence =
+          player.player_presence;
+
+
+        if(Array.isArray(presence)){
+
+          presence =
+            presence[0];
+
+        }
+
+
+        const lastSeen =
+          presence?.last_seen
+          ? new Date(
+              presence.last_seen
+            ).getTime()
+          : 0;
+
+
+        const isOnline =
+          presence?.is_online === true &&
+          (
+            now - lastSeen
+          ) < 120000;
+
+
+        const status =
+          isOnline
+            ? `
+              <span class="success">
+                <span class="online-dot"></span>
+                Online
+              </span>
+            `
+            : `
+              <span class="muted">
+                <span class="offline-dot"></span>
+                Offline
+              </span>
+            `;
+
+
+        return `
+
+          <div class="player">
+
+            <div class="player-name">
+              👤 ${escapeHTML(player.name)}
+            </div>
+
+            <div>
+              ${status}
+            </div>
+
+            <hr>
+
+            <div class="player-row">
+              <span>📍 City</span>
+              <strong>
+                ${escapeHTML(player.city || "Unknown")}
+              </strong>
+            </div>
+
+            <div class="player-row">
+              <span>🎂 Age</span>
+              <strong>
+                ${player.age || 0}
+              </strong>
+            </div>
+
+            <div class="player-row">
+              <span>💰 Wealth</span>
+              <strong>
+                $${Number(
+                  player.money || 0
+                ).toLocaleString()}
+              </strong>
+            </div>
+
+            <div class="player-row">
+              <span>⭐ Reputation</span>
+              <strong>
+                ${player.reputation || 0}
+              </strong>
+            </div>
+
+            <div class="player-row">
+              <span>💼 Career</span>
+              <strong>
+                ${escapeHTML(
+                  player.career ||
+                  "Unemployed"
+                )}
+              </strong>
+            </div>
+
+            <div class="player-row">
+              <span>🏢 Business</span>
+              <strong>
+                ${escapeHTML(
+                  player.business ||
+                  "None"
+                )}
+              </strong>
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
@@ -2452,9 +2960,29 @@ async function socialize(){
 
 async function logout(){
 
-  await supabaseClient.auth.signOut();
+  await setOffline();
 
-  currentPlayer = null;
+
+  if(presenceTimer){
+
+    clearInterval(
+      presenceTimer
+    );
+
+    presenceTimer =
+      null;
+
+  }
+
+
+  await supabaseClient
+    .auth
+    .signOut();
+
+
+  currentPlayer =
+    null;
+
 
   showLogin();
 
@@ -2466,9 +2994,15 @@ async function logout(){
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-  async (event,session)=>{
+  async (
+    event,
+    session
+  ) => {
 
-    if(event === "SIGNED_IN" && session){
+    if(
+      event === "SIGNED_IN" &&
+      session
+    ){
 
       await loadPlayer();
 
@@ -2479,7 +3013,38 @@ supabaseClient.auth.onAuthStateChange(
 
 
 /* =========================================================
-   START APP
+   PAGE CLOSE
+========================================================= */
+
+window.addEventListener(
+  "beforeunload",
+  () => {
+
+    if(currentPlayer){
+
+      supabaseClient
+        .from("player_presence")
+        .update({
+
+          is_online:false,
+
+          last_seen:
+            new Date().toISOString()
+
+        })
+        .eq(
+          "player_id",
+          currentPlayer.id
+        );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   START
 ========================================================= */
 
 async function startGame(){
@@ -2487,7 +3052,9 @@ async function startGame(){
   const {
     data
   } =
-    await supabaseClient.auth.getSession();
+    await supabaseClient
+      .auth
+      .getSession();
 
 
   if(data.session){
