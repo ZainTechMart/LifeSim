@@ -71,6 +71,11 @@ button{
   cursor:pointer;
 }
 
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
 input,
 select{
   width:100%;
@@ -81,6 +86,12 @@ select{
   background:#0f1628;
   color:white;
   font-size:16px;
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:#667eea;
 }
 
 .features{
@@ -115,6 +126,44 @@ select{
   color:white;
 }
 
+.smallButton{
+  background:#252e45;
+  color:white;
+  font-size:14px;
+  padding:12px;
+}
+
+.message{
+  margin-top:15px;
+  color:#aab3c7;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.error{
+  color:#ff8c8c;
+}
+
+.success{
+  color:#7ee2a8;
+}
+
+.statBox{
+  background:#10172a;
+  border-radius:14px;
+  padding:16px 5px;
+}
+
+.statValue{
+  font-size:18px;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+.loading{
+  opacity:.7;
+}
+
 </style>
 
 </head>
@@ -144,8 +193,12 @@ select{
       with players around the world.
     </p>
 
-    <button onclick="showCharacter()">
+    <button onclick="showAuth('signup')">
       🚀 Start Your Life
+    </button>
+
+    <button class="back" onclick="showAuth('login')">
+      🔐 Login
     </button>
 
     <div class="features">
@@ -176,7 +229,355 @@ select{
 </div>
 
 
+<!-- Supabase -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
 <script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://gkhbsqihmktxfewdvytg.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_mCmmD_Z-08BjfDNWfeY9AA_Wc9WxgAQ";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =========================================================
+   GLOBAL DATA
+========================================================= */
+
+let currentUser = null;
+let currentPlayer = null;
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", async function(){
+
+  const {
+    data: {
+      session
+    }
+  } = await supabaseClient.auth.getSession();
+
+  if(session){
+
+    currentUser = session.user;
+
+    await loadPlayer();
+
+  }
+
+});
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function showHome(){
+
+  document.getElementById("gameCard").innerHTML = `
+
+    <h2>
+      Welcome to LifeSim
+    </h2>
+
+    <p class="description">
+      Build your own virtual life,
+      make decisions, start a career,
+      build a business and compete
+      with players around the world.
+    </p>
+
+    <button onclick="showAuth('signup')">
+      🚀 Start Your Life
+    </button>
+
+    <button class="back" onclick="showAuth('login')">
+      🔐 Login
+    </button>
+
+    <div class="features">
+
+      <div class="feature">
+        <span class="icon">👤</span>
+        Create
+      </div>
+
+      <div class="feature">
+        <span class="icon">💰</span>
+        Earn
+      </div>
+
+      <div class="feature">
+        <span class="icon">🌍</span>
+        Compete
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   AUTH SCREEN
+========================================================= */
+
+function showAuth(mode){
+
+  const isSignup =
+    mode === "signup";
+
+  document.getElementById("gameCard").innerHTML = `
+
+    <h2>
+      ${isSignup ? "🚀 Create Account" : "🔐 Login"}
+    </h2>
+
+    <p class="description">
+      ${
+        isSignup
+        ? "Create your LifeSim account and start your virtual life."
+        : "Login to continue your LifeSim journey."
+      }
+    </p>
+
+    <input
+      id="authEmail"
+      type="email"
+      placeholder="Email address"
+      autocomplete="email"
+    >
+
+    <input
+      id="authPassword"
+      type="password"
+      placeholder="Password"
+      autocomplete="${isSignup ? "new-password" : "current-password"}"
+    >
+
+    <button
+      id="authButton"
+      onclick="${isSignup ? "signup()" : "login()"}"
+    >
+      ${isSignup ? "✨ Create Account" : "🔓 Login"}
+    </button>
+
+    <div
+      id="authMessage"
+      class="message"
+    ></div>
+
+    <button
+      class="back"
+      onclick="${isSignup ? "showAuth('login')" : "showHome()"}"
+    >
+      ← ${isSignup ? "Already have an account? Login" : "Back"}
+    </button>
+
+  `;
+
+}
+
+
+/* =========================================================
+   SIGN UP
+========================================================= */
+
+async function signup(){
+
+  const email =
+    document.getElementById("authEmail").value
+      .trim();
+
+  const password =
+    document.getElementById("authPassword").value;
+
+  const message =
+    document.getElementById("authMessage");
+
+  const button =
+    document.getElementById("authButton");
+
+
+  if(!email || !password){
+
+    message.className =
+      "message error";
+
+    message.textContent =
+      "Please enter your email and password.";
+
+    return;
+  }
+
+
+  if(password.length < 6){
+
+    message.className =
+      "message error";
+
+    message.textContent =
+      "Password must be at least 6 characters.";
+
+    return;
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Creating account...";
+
+
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.signUp({
+
+    email: email,
+
+    password: password
+
+  });
+
+
+  if(error){
+
+    button.disabled = false;
+
+    button.textContent =
+      "✨ Create Account";
+
+    message.className =
+      "message error";
+
+    message.textContent =
+      error.message;
+
+    return;
+  }
+
+
+  if(data.user){
+
+    currentUser =
+      data.user;
+
+    message.className =
+      "message success";
+
+    message.textContent =
+      "Account created successfully!";
+
+
+    setTimeout(function(){
+
+      showCharacter();
+
+    },500);
+
+  }
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function login(){
+
+  const email =
+    document.getElementById("authEmail").value
+      .trim();
+
+  const password =
+    document.getElementById("authPassword").value;
+
+  const message =
+    document.getElementById("authMessage");
+
+  const button =
+    document.getElementById("authButton");
+
+
+  if(!email || !password){
+
+    message.className =
+      "message error";
+
+    message.textContent =
+      "Please enter your email and password.";
+
+    return;
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Logging in...";
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.signInWithPassword({
+
+      email: email,
+
+      password: password
+
+    });
+
+
+  if(error){
+
+    button.disabled = false;
+
+    button.textContent =
+      "🔓 Login";
+
+    message.className =
+      "message error";
+
+    message.textContent =
+      error.message;
+
+    return;
+  }
+
+
+  currentUser =
+    data.user;
+
+
+  await loadPlayer();
+
+}
+
+
+/* =========================================================
+   CHARACTER CREATION
+========================================================= */
 
 function showCharacter(){
 
@@ -236,12 +637,23 @@ function showCharacter(){
 
     </select>
 
-    <button onclick="createCharacter()">
+    <button
+      id="createButton"
+      onclick="createCharacter()"
+    >
       ✨ Create Character
     </button>
 
-    <button class="back" onclick="location.reload()">
-      ← Back
+    <div
+      id="characterMessage"
+      class="message"
+    ></div>
+
+    <button
+      class="back"
+      onclick="logout()"
+    >
+      🚪 Logout
     </button>
 
   `;
@@ -249,33 +661,219 @@ function showCharacter(){
 }
 
 
-function createCharacter(){
+/* =========================================================
+   CREATE CHARACTER + SAVE TO SUPABASE
+========================================================= */
 
-  const name =
-    document.getElementById("playerName").value.trim();
+async function createCharacter(){
 
-  const age =
-    document.getElementById("playerAge").value;
+  if(!currentUser){
 
-  const city =
-    document.getElementById("playerCity").value.trim();
+    alert("Please login first.");
 
-  const goal =
-    document.getElementById("playerGoal").value;
-
-
-  if(!name || !age || !city || !goal){
-
-    alert("Please complete all fields.");
+    showAuth("login");
 
     return;
   }
 
 
+  const name =
+    document.getElementById("playerName")
+      .value.trim();
+
+  const age =
+    parseInt(
+      document.getElementById("playerAge")
+        .value
+    );
+
+  const city =
+    document.getElementById("playerCity")
+      .value.trim();
+
+  const goal =
+    document.getElementById("playerGoal")
+      .value;
+
+
+  const message =
+    document.getElementById("characterMessage");
+
+  const button =
+    document.getElementById("createButton");
+
+
+  if(!name || !age || !city || !goal){
+
+    message.className =
+      "message error";
+
+    message.textContent =
+      "Please complete all fields.";
+
+    return;
+  }
+
+
+  if(age < 13 || age > 100){
+
+    message.className =
+      "message error";
+
+    message.textContent =
+      "Age must be between 13 and 100.";
+
+    return;
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Saving your life...";
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .insert({
+
+        id: currentUser.id,
+
+        name: name,
+
+        age: age,
+
+        city: city,
+
+        goal: goal
+
+      })
+      .select()
+      .single();
+
+
+  if(error){
+
+    button.disabled = false;
+
+    button.textContent =
+      "✨ Create Character";
+
+
+    if(error.code === "23505"){
+
+      message.className =
+        "message error";
+
+      message.textContent =
+        "This account already has a character.";
+
+      await loadPlayer();
+
+      return;
+
+    }
+
+
+    message.className =
+      "message error";
+
+    message.textContent =
+      error.message;
+
+    return;
+  }
+
+
+  currentPlayer =
+    data;
+
+
+  showWelcome();
+
+}
+
+
+/* =========================================================
+   LOAD PLAYER FROM SUPABASE
+========================================================= */
+
+async function loadPlayer(){
+
+  if(!currentUser){
+
+    return;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("players")
+      .select("*")
+      .eq("id", currentUser.id)
+      .maybeSingle();
+
+
+  if(error){
+
+    console.error(
+      "Player load error:",
+      error
+    );
+
+    return;
+  }
+
+
+  if(data){
+
+    currentPlayer =
+      data;
+
+    showWelcome();
+
+  }else{
+
+    showCharacter();
+
+  }
+
+}
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
+
+function showWelcome(){
+
+  if(!currentPlayer){
+
+    return;
+  }
+
+
+  const safeName =
+    escapeHTML(currentPlayer.name);
+
+  const safeCity =
+    escapeHTML(currentPlayer.city);
+
+  const safeAge =
+    escapeHTML(String(currentPlayer.age));
+
+
   document.getElementById("gameCard").innerHTML = `
 
     <h2>
-      🎉 Welcome, ${name}!
+      🎉 Welcome, ${safeName}!
     </h2>
 
     <p class="description">
@@ -286,17 +884,17 @@ function createCharacter(){
 
       <div class="feature">
         <span class="icon">🎂</span>
-        Age<br>${age}
+        Age<br>${safeAge}
       </div>
 
       <div class="feature">
         <span class="icon">📍</span>
-        City<br>${city}
+        City<br>${safeCity}
       </div>
 
       <div class="feature">
         <span class="icon">💰</span>
-        Money<br>$10,000
+        Money<br>$${Number(currentPlayer.money).toLocaleString()}
       </div>
 
     </div>
@@ -305,12 +903,29 @@ function createCharacter(){
       🌍 Enter Your World
     </button>
 
+    <button
+      class="back"
+      onclick="logout()"
+    >
+      🚪 Logout
+    </button>
+
   `;
 
 }
 
 
+/* =========================================================
+   ENTER WORLD
+========================================================= */
+
 function enterWorld(){
+
+  if(!currentPlayer){
+
+    return;
+  }
+
 
   document.getElementById("gameCard").innerHTML = `
 
@@ -325,36 +940,125 @@ function enterWorld(){
 
     <div class="features">
 
-      <div class="feature">
+      <div class="statBox">
         <span class="icon">💰</span>
-        Money<br>$10,000
+        Money
+        <div class="statValue">
+          $${Number(currentPlayer.money).toLocaleString()}
+        </div>
       </div>
 
-      <div class="feature">
+      <div class="statBox">
         <span class="icon">❤️</span>
-        Happiness<br>70%
+        Happiness
+        <div class="statValue">
+          ${Number(currentPlayer.happiness)}%
+        </div>
       </div>
 
-      <div class="feature">
+      <div class="statBox">
         <span class="icon">⭐</span>
-        Reputation<br>10
+        Reputation
+        <div class="statValue">
+          ${Number(currentPlayer.reputation)}
+        </div>
       </div>
 
     </div>
 
-    <button onclick="alert('Career system coming next!')">
+    <button onclick="careerComingSoon()">
       💼 Career
     </button>
 
-    <button onclick="alert('Business system coming next!')">
+    <button onclick="businessComingSoon()">
       🏢 Business
     </button>
 
-    <button onclick="alert('Online world coming next!')">
+    <button onclick="onlineComingSoon()">
       🌎 Online Players
     </button>
 
+    <button
+      class="back"
+      onclick="showWelcome()"
+    >
+      ← Back
+    </button>
+
+    <button
+      class="smallButton"
+      onclick="logout()"
+    >
+      🚪 Logout
+    </button>
+
   `;
+
+}
+
+
+/* =========================================================
+   FUTURE SYSTEMS
+========================================================= */
+
+function careerComingSoon(){
+
+  alert(
+    "💼 Career system is coming next!"
+  );
+
+}
+
+
+function businessComingSoon(){
+
+  alert(
+    "🏢 Business system is coming next!"
+  );
+
+}
+
+
+function onlineComingSoon(){
+
+  alert(
+    "🌎 Online Players system is coming next!"
+  );
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  currentUser =
+    null;
+
+  currentPlayer =
+    null;
+
+  showHome();
+
+}
+
+
+/* =========================================================
+   HTML SAFETY
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
