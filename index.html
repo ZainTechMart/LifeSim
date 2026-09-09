@@ -1,184 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>LifeSim</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<title>LifeSim</title>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #0b1020;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+<style>
 
-    .container {
-      width: 92%;
-      max-width: 520px;
-      text-align: center;
-      padding: 30px 20px;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    .logo {
-      font-size: 54px;
-      font-weight: bold;
-      letter-spacing: -2px;
-      margin-bottom: 8px;
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  background:#0b1020;
+  color:white;
+  font-family:Arial,sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-    .tagline {
-      color: #aab3c7;
-      font-size: 17px;
-      margin-bottom: 45px;
-    }
+.container{
+  width:92%;
+  max-width:520px;
+  text-align:center;
+  padding:25px 15px;
+}
 
-    .card {
-      background: #151c30;
-      border: 1px solid #26304a;
-      border-radius: 22px;
-      padding: 28px 22px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-    }
+.logo{
+  font-size:52px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
 
-    .card h2 {
-      margin-top: 0;
-      font-size: 25px;
-    }
+.tagline{
+  color:#aab3c7;
+  margin-bottom:35px;
+}
 
-    .card p {
-      color: #9da7bd;
-      line-height: 1.6;
-    }
+.card{
+  background:#151c30;
+  border:1px solid #293450;
+  border-radius:22px;
+  padding:28px 20px;
+}
 
-    .start-btn {
-      width: 100%;
-      margin-top: 22px;
-      padding: 16px;
-      border: 0;
-      border-radius: 13px;
-      background: #ffffff;
-      color: #0b1020;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+h2{
+  margin-top:0;
+}
 
-    .start-btn:active {
-      transform: scale(0.98);
-    }
+.description{
+  color:#9da7bd;
+  line-height:1.6;
+}
 
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 22px;
-    }
+button{
+  width:100%;
+  padding:15px;
+  margin-top:20px;
+  border:0;
+  border-radius:12px;
+  background:white;
+  color:#0b1020;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .feature {
-      background: #10172a;
-      border-radius: 13px;
-      padding: 15px 5px;
-      font-size: 13px;
-      color: #c5ccda;
-    }
+input,
+select{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border-radius:10px;
+  border:1px solid #303b59;
+  background:#0f1628;
+  color:white;
+  font-size:16px;
+}
 
-    .icon {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 7px;
-    }
+.features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:20px;
+}
 
-    .footer {
-      margin-top: 28px;
-      color: #667087;
-      font-size: 12px;
-    }
+.feature{
+  background:#10172a;
+  border-radius:12px;
+  padding:13px 4px;
+  font-size:13px;
+  color:#c5ccda;
+}
 
-    @media (max-width: 380px) {
-      .logo {
-        font-size: 44px;
-      }
+.icon{
+  display:block;
+  font-size:22px;
+  margin-bottom:6px;
+}
 
-      .features {
-        gap: 6px;
-      }
+.footer{
+  margin-top:22px;
+  color:#667087;
+  font-size:12px;
+}
 
-      .feature {
-        font-size: 11px;
-      }
-    }
-  </style>
+.back{
+  background:#252e45;
+  color:white;
+}
+
+</style>
+
 </head>
 
 <body>
 
-  <main class="container">
+<div class="container">
 
-    <div class="logo">
-      LifeSim
-    </div>
+  <div class="logo">
+    LifeSim
+  </div>
 
-    <div class="tagline">
-      Your Life. Your Choices.
-    </div>
+  <div class="tagline">
+    Your Life. Your Choices.
+  </div>
 
-    <div class="card">
+  <div class="card" id="gameCard">
 
-      <h2>Welcome to LifeSim</h2>
+    <h2>
+      Welcome to LifeSim
+    </h2>
 
-      <p>
-        Build your own virtual life,
-        make decisions, start a career,
-        build a business and compete
-        with players around the world.
-      </p>
+    <p class="description">
+      Build your own virtual life,
+      make decisions, start a career,
+      build a business and compete
+      with players around the world.
+    </p>
 
-      <button class="start-btn" onclick="startGame()">
-        🚀 Start Your Life
-      </button>
+    <button onclick="showCharacter()">
+      🚀 Start Your Life
+    </button>
 
-      <div class="features">
+    <div class="features">
 
-        <div class="feature">
-          <span class="icon">👤</span>
-          Create
-        </div>
+      <div class="feature">
+        <span class="icon">👤</span>
+        Create
+      </div>
 
-        <div class="feature">
-          <span class="icon">💰</span>
-          Earn
-        </div>
+      <div class="feature">
+        <span class="icon">💰</span>
+        Earn
+      </div>
 
-        <div class="feature">
-          <span class="icon">🌍</span>
-          Compete
-        </div>
-
+      <div class="feature">
+        <span class="icon">🌍</span>
+        Compete
       </div>
 
     </div>
 
-    <div class="footer">
-      LifeSim • Virtual Life Simulator
+  </div>
+
+  <div class="footer">
+    LifeSim • Virtual Life Simulator
+  </div>
+
+</div>
+
+
+<script>
+
+function showCharacter(){
+
+  document.getElementById("gameCard").innerHTML = `
+
+    <h2>
+      👤 Create Your Character
+    </h2>
+
+    <p class="description">
+      This is the beginning of your new life.
+    </p>
+
+    <input
+      id="playerName"
+      type="text"
+      placeholder="Your name"
+      maxlength="20"
+    >
+
+    <input
+      id="playerAge"
+      type="number"
+      placeholder="Your age"
+      min="13"
+      max="100"
+    >
+
+    <input
+      id="playerCity"
+      type="text"
+      placeholder="Your city"
+      maxlength="30"
+    >
+
+    <select id="playerGoal">
+
+      <option value="">
+        Choose your life goal
+      </option>
+
+      <option value="business">
+        💼 Become a Business Owner
+      </option>
+
+      <option value="career">
+        🎓 Build a Great Career
+      </option>
+
+      <option value="wealth">
+        💰 Become Rich
+      </option>
+
+      <option value="fame">
+        ⭐ Become Famous
+      </option>
+
+    </select>
+
+    <button onclick="createCharacter()">
+      ✨ Create Character
+    </button>
+
+    <button class="back" onclick="location.reload()">
+      ← Back
+    </button>
+
+  `;
+
+}
+
+
+function createCharacter(){
+
+  const name =
+    document.getElementById("playerName").value.trim();
+
+  const age =
+    document.getElementById("playerAge").value;
+
+  const city =
+    document.getElementById("playerCity").value.trim();
+
+  const goal =
+    document.getElementById("playerGoal").value;
+
+
+  if(!name || !age || !city || !goal){
+
+    alert("Please complete all fields.");
+
+    return;
+  }
+
+
+  document.getElementById("gameCard").innerHTML = `
+
+    <h2>
+      🎉 Welcome, ${name}!
+    </h2>
+
+    <p class="description">
+      Your LifeSim journey has begun.
+    </p>
+
+    <div class="features">
+
+      <div class="feature">
+        <span class="icon">🎂</span>
+        Age<br>${age}
+      </div>
+
+      <div class="feature">
+        <span class="icon">📍</span>
+        City<br>${city}
+      </div>
+
+      <div class="feature">
+        <span class="icon">💰</span>
+        Money<br>$10,000
+      </div>
+
     </div>
 
-  </main>
+    <button onclick="enterWorld()">
+      🌍 Enter Your World
+    </button>
 
-  <script>
-    function startGame() {
-      alert("Your LifeSim journey is about to begin!");
-    }
-  </script>
+  `;
+
+}
+
+
+function enterWorld(){
+
+  document.getElementById("gameCard").innerHTML = `
+
+    <h2>
+      🌍 Your World
+    </h2>
+
+    <p class="description">
+      Welcome to LifeSim.
+      Your virtual life is ready.
+    </p>
+
+    <div class="features">
+
+      <div class="feature">
+        <span class="icon">💰</span>
+        Money<br>$10,000
+      </div>
+
+      <div class="feature">
+        <span class="icon">❤️</span>
+        Happiness<br>70%
+      </div>
+
+      <div class="feature">
+        <span class="icon">⭐</span>
+        Reputation<br>10
+      </div>
+
+    </div>
+
+    <button onclick="alert('Career system coming next!')">
+      💼 Career
+    </button>
+
+    <button onclick="alert('Business system coming next!')">
+      🏢 Business
+    </button>
+
+    <button onclick="alert('Online world coming next!')">
+      🌎 Online Players
+    </button>
+
+  `;
+
+}
+
+</script>
 
 </body>
 </html>
