@@ -1,161 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
->
-
-<title>LifeSim - 3D Village</title>
+<title>Village Business Simulator - Step 2</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- THREE.JS -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 <style>
-
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
-}
-
-html,
-body{
-  width:100%;
-  height:100%;
+  -webkit-tap-highlight-color:transparent;
 }
 
 body{
   font-family:Arial,sans-serif;
-  background:#0f172a;
+  background:#07101b;
   color:#fff;
-  min-height:100vh;
+  overflow:hidden;
 }
 
 button{
   border:0;
-  border-radius:10px;
-  padding:12px 18px;
   cursor:pointer;
-  font-size:15px;
-  font-weight:bold;
-}
-
-input,
-select{
-  width:100%;
-  padding:12px;
-  margin:7px 0 12px;
-  border:1px solid #334155;
-  border-radius:9px;
-  background:#1e293b;
   color:#fff;
-  font-size:15px;
-}
-
-.container{
-  width:100%;
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
-
-.card{
-  background:#1e293b;
-  border-radius:16px;
-  padding:20px;
-  margin-bottom:18px;
-  box-shadow:0 8px 25px rgba(0,0,0,.2);
-}
-
-.center{
-  text-align:center;
 }
 
 .hidden{
-  display:none !important;
+  display:none!important;
+}
+
+/* ================= LOGIN ================= */
+
+#loginScreen,
+#characterScreen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:
+    radial-gradient(circle at top,#173d55 0%,#07101b 55%,#03070d 100%);
+  z-index:1000;
+  padding:20px;
+}
+
+.authBox{
+  width:min(430px,100%);
+  background:rgba(15,28,43,.96);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:22px;
+  padding:25px;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
 }
 
 .logo{
+  text-align:center;
   font-size:38px;
-  font-weight:bold;
+  font-weight:900;
+  margin-bottom:5px;
 }
 
-.tagline{
-  color:#94a3b8;
+.subtitle{
+  text-align:center;
+  color:#aab9c9;
   margin-bottom:25px;
 }
 
-h2{
-  margin-bottom:15px;
-}
-
-p{
-  color:#cbd5e1;
-  line-height:1.5;
-}
-
-.primary{
-  background:#22c55e;
-  color:#052e16;
-}
-
-.secondary{
-  background:#3b82f6;
+.input{
+  width:100%;
+  padding:14px;
+  margin-bottom:12px;
+  border-radius:12px;
+  border:1px solid #26394c;
+  background:#0a1623;
   color:#fff;
+  outline:none;
 }
 
-.danger{
-  background:#ef4444;
-  color:#fff;
+.input:focus{
+  border-color:#28b7ff;
 }
 
-.message{
+.primaryBtn{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  background:#1688d8;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+.secondaryBtn{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  background:#1b2b3d;
+  margin-top:10px;
+}
+
+.status{
+  min-height:20px;
+  text-align:center;
+  color:#ffcc66;
   margin-top:12px;
-  min-height:22px;
+  font-size:14px;
 }
 
-.success{
-  color:#4ade80;
+/* ================= GAME ================= */
+
+#gameScreen{
+  position:fixed;
+  inset:0;
+  background:#111;
 }
-
-.error{
-  color:#f87171;
-}
-
-
-/* =========================================================
-   3D GAME
-========================================================= */
 
 #gameWorld{
-  position:relative;
-  width:100%;
-  height:70vh;
-  min-height:480px;
-  overflow:hidden;
-  border-radius:18px;
-  background:#87ceeb;
-  touch-action:none;
-}
-
-#gameCanvas{
   position:absolute;
   inset:0;
-  width:100%;
-  height:100%;
+  overflow:hidden;
+}
+
+canvas{
   display:block;
 }
 
+/* ================= TOP HUD ================= */
 
-/* TOP GAME UI */
-
-.game-top-ui{
+#topHud{
   position:absolute;
   top:12px;
   left:12px;
@@ -167,460 +144,456 @@ p{
   pointer-events:none;
 }
 
-.game-info{
-  background:rgba(15,23,42,.78);
+.hudBox{
+  pointer-events:auto;
+  background:rgba(5,13,22,.82);
+  border:1px solid rgba(255,255,255,.12);
   backdrop-filter:blur(8px);
+  border-radius:14px;
+  padding:10px 13px;
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+.playerName{
+  font-weight:bold;
+  font-size:15px;
+}
+
+.stats{
+  display:flex;
+  gap:10px;
+  margin-top:5px;
+  font-size:13px;
+}
+
+.statMoney{
+  color:#71e58b;
+}
+
+.statEnergy{
+  color:#7ed7ff;
+}
+
+#logoutBtn{
+  background:#9d2934;
+  padding:9px 12px;
+  border-radius:10px;
+  font-size:12px;
+}
+
+/* ================= INTERACTION ================= */
+
+#interactionBox{
+  position:absolute;
+  left:50%;
+  bottom:170px;
+  transform:translateX(-50%);
+  width:min(430px,90%);
+  background:rgba(5,13,22,.94);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:15px;
+  text-align:center;
+  z-index:20;
+  display:none;
+}
+
+#interactionTitle{
+  font-weight:bold;
+  font-size:17px;
+  margin-bottom:6px;
+}
+
+#interactionText{
+  color:#b8c7d5;
+  font-size:13px;
+  margin-bottom:12px;
+}
+
+.actionRow{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.actionBtn{
+  background:#147ec1;
   padding:10px 14px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.actionBtn.green{
+  background:#198b50;
+}
+
+.actionBtn.orange{
+  background:#c87919;
+}
+
+.actionBtn.red{
+  background:#a83442;
+}
+
+/* ================= NOTIFICATION ================= */
+
+#notification{
+  position:absolute;
+  top:92px;
+  left:50%;
+  transform:translateX(-50%) translateY(-15px);
+  background:rgba(5,13,22,.94);
+  border:1px solid rgba(255,255,255,.15);
   border-radius:12px;
-  pointer-events:auto;
+  padding:11px 17px;
+  font-size:13px;
+  opacity:0;
+  transition:.25s;
+  pointer-events:none;
+  z-index:30;
+  white-space:nowrap;
 }
 
-.game-info strong{
-  color:#4ade80;
+#notification.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
 }
 
-.exit-game{
-  pointer-events:auto;
-  background:rgba(239,68,68,.9);
-  color:#fff;
-}
-
-
-/* MOBILE JOYSTICK */
+/* ================= JOYSTICK ================= */
 
 #joystick{
   position:absolute;
-  left:25px;
-  bottom:25px;
+  left:22px;
+  bottom:28px;
   width:135px;
   height:135px;
   border-radius:50%;
-  background:rgba(15,23,42,.35);
-  border:2px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.09);
+  border:2px solid rgba(255,255,255,.15);
+  z-index:50;
   touch-action:none;
-  user-select:none;
 }
 
 #joystickKnob{
   position:absolute;
-  left:50%;
-  top:50%;
   width:62px;
   height:62px;
-  transform:translate(-50%,-50%);
   border-radius:50%;
-  background:rgba(255,255,255,.75);
-  box-shadow:0 5px 15px rgba(0,0,0,.3);
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(255,255,255,.22);
+  border:2px solid rgba(255,255,255,.28);
 }
 
+/* ================= CAMERA BUTTONS ================= */
 
-/* CAMERA BUTTONS */
-
-.camera-buttons{
+#cameraControls{
   position:absolute;
-  right:20px;
-  bottom:25px;
+  right:18px;
+  bottom:28px;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:8px;
+  z-index:50;
 }
 
-.camera-buttons button{
-  width:52px;
-  height:52px;
-  padding:0;
-  border-radius:50%;
-  background:rgba(15,23,42,.7);
-  color:white;
+.cameraBtn{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:rgba(5,13,22,.78);
+  border:1px solid rgba(255,255,255,.12);
   font-size:20px;
 }
 
+/* ================= HELP ================= */
 
-/* LOADING */
-
-#worldLoading{
+#help{
   position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#0f172a;
-  z-index:20;
-}
-
-.loading-box{
-  text-align:center;
-}
-
-.loading-box h2{
-  margin-bottom:10px;
-}
-
-
-/* DESKTOP HELP */
-
-.controls-help{
-  position:absolute;
-  bottom:15px;
   left:50%;
-  transform:translateX(-50%);
-  background:rgba(15,23,42,.7);
-  padding:8px 14px;
-  border-radius:10px;
-  font-size:13px;
-  color:#cbd5e1;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(400px,90%);
+  background:rgba(5,13,22,.96);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:20px;
+  padding:22px;
+  z-index:100;
+  display:none;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
 }
 
+#help h2{
+  margin-bottom:12px;
+}
 
-/* =========================================================
-   MOBILE
-========================================================= */
+#help p{
+  color:#b9c6d3;
+  line-height:1.6;
+  font-size:14px;
+}
+
+#closeHelp{
+  margin-top:16px;
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  background:#176fa5;
+}
+
+/* ================= BOTTOM INFO ================= */
+
+#bottomInfo{
+  position:absolute;
+  left:50%;
+  bottom:12px;
+  transform:translateX(-50%);
+  background:rgba(5,13,22,.7);
+  padding:7px 12px;
+  border-radius:10px;
+  font-size:11px;
+  color:#aebdca;
+  pointer-events:none;
+}
 
 @media(max-width:700px){
 
-  .container{
-    padding:8px;
+  #topHud{
+    top:8px;
+    left:8px;
+    right:8px;
   }
 
-  #gameWorld{
-    height:calc(100vh - 16px);
-    min-height:500px;
-    border-radius:12px;
-  }
-
-  .controls-help{
-    display:none;
-  }
-
-  .game-info{
-    font-size:13px;
+  .hudBox{
     padding:8px 10px;
   }
 
-  .exit-game{
-    padding:9px 12px;
-    font-size:13px;
+  .stats{
+    gap:7px;
   }
 
+  #interactionBox{
+    bottom:175px;
+  }
+
+  #bottomInfo{
+    display:none;
+  }
 }
-
 </style>
-
 </head>
 
 <body>
 
-<div class="container">
+<!-- ================= LOGIN ================= -->
 
+<div id="loginScreen">
 
-<!-- =====================================================
-     LOGIN
-===================================================== -->
+  <div class="authBox">
 
-<section id="loginScreen">
+    <div class="logo">🌾 Village Life</div>
 
-  <div class="card center">
-
-    <div class="logo">
-      LifeSim
+    <div class="subtitle">
+      Village Business Simulator
     </div>
-
-    <div class="tagline">
-      Your Life. Your Choices.
-    </div>
-
-    <h2>Welcome</h2>
 
     <input
       id="loginEmail"
+      class="input"
       type="email"
       placeholder="Email"
     >
 
     <input
       id="loginPassword"
+      class="input"
       type="password"
       placeholder="Password"
     >
 
-    <button
-      class="primary"
-      onclick="login()"
-    >
+    <button class="primaryBtn" onclick="login()">
       Login
     </button>
 
-    <button
-      class="secondary"
-      onclick="showSignup()"
-      style="margin-left:6px;"
-    >
+    <button class="secondaryBtn" onclick="signup()">
       Create Account
     </button>
 
-    <div
-      id="loginMessage"
-      class="message"
-    ></div>
+    <div id="loginStatus" class="status"></div>
 
   </div>
 
-</section>
+</div>
 
 
-<!-- =====================================================
-     SIGNUP
-===================================================== -->
+<!-- ================= CHARACTER ================= -->
 
-<section
-  id="signupScreen"
-  class="hidden"
->
+<div id="characterScreen" class="hidden">
 
-  <div class="card center">
+  <div class="authBox">
 
-    <div class="logo">
-      LifeSim
+    <div class="logo">👨‍🌾</div>
+
+    <div class="subtitle">
+      Create Your Village Character
     </div>
 
-    <div class="tagline">
-      Start your virtual life.
-    </div>
-
-    <h2>Create Account</h2>
-
     <input
-      id="signupEmail"
-      type="email"
-      placeholder="Email"
+      id="characterName"
+      class="input"
+      placeholder="Your name"
+      maxlength="20"
     >
 
     <input
-      id="signupPassword"
-      type="password"
-      placeholder="Password"
+      id="characterCity"
+      class="input"
+      placeholder="Village / City"
+      maxlength="30"
     >
 
-    <button
-      class="primary"
-      onclick="signup()"
-    >
-      Sign Up
-    </button>
-
-    <button
-      class="secondary"
-      onclick="showLogin()"
-      style="margin-left:6px;"
-    >
-      Back to Login
-    </button>
-
-    <div
-      id="signupMessage"
-      class="message"
-    ></div>
-
-  </div>
-
-</section>
-
-
-<!-- =====================================================
-     CHARACTER
-===================================================== -->
-
-<section
-  id="characterScreen"
-  class="hidden"
->
-
-  <div class="card">
-
-    <div class="center">
-
-      <div class="logo">
-        LifeSim
-      </div>
-
-      <p>
-        Create your character and begin your village life.
-      </p>
-
-    </div>
-
-    <hr>
-
-    <label>Name</label>
-
-    <input
-      id="playerName"
-      type="text"
-      placeholder="Your character name"
-    >
-
-    <label>Age</label>
-
-    <input
-      id="playerAge"
-      type="number"
-      min="10"
-      max="100"
-      value="18"
-    >
-
-    <label>City</label>
-
-    <select id="playerCity">
-
-      <option>Islamabad</option>
-      <option>Rawalpindi</option>
-      <option>Lahore</option>
-      <option>Karachi</option>
-      <option>Peshawar</option>
-      <option>Multan</option>
-      <option>Faisalabad</option>
-
+    <select id="characterGoal" class="input">
+      <option value="Farmer">Become a Farmer</option>
+      <option value="Shopkeeper">Become a Shopkeeper</option>
+      <option value="Businessman">Become a Businessman</option>
+      <option value="Rich">Become Rich</option>
     </select>
 
-    <label>Life Goal</label>
-
-    <select id="playerGoal">
-
-      <option>Become Rich</option>
-      <option>Build a Business</option>
-      <option>Become Famous</option>
-      <option>Help People</option>
-      <option>Become Successful</option>
-
-    </select>
-
-    <button
-      class="primary"
-      onclick="createCharacter()"
-    >
-      Start Village Life
+    <button class="primaryBtn" onclick="createCharacter()">
+      Enter Village
     </button>
 
-    <div
-      id="characterMessage"
-      class="message"
-    ></div>
+    <div id="characterStatus" class="status"></div>
 
   </div>
 
-</section>
+</div>
 
 
-<!-- =====================================================
-     GAME
-===================================================== -->
+<!-- ================= GAME ================= -->
 
-<section
-  id="gameScreen"
-  class="hidden"
->
+<div id="gameScreen" class="hidden">
 
-  <div
-    id="gameWorld"
-  >
+  <div id="gameWorld"></div>
 
-    <div id="worldLoading">
+  <!-- HUD -->
 
-      <div class="loading-box">
+  <div id="topHud">
 
-        <h2>
-          🌾 Loading Village...
-        </h2>
+    <div class="hudBox">
 
-        <p>
-          Preparing your world
-        </p>
-
+      <div class="playerName" id="hudName">
+        Player
       </div>
 
-    </div>
+      <div class="stats">
 
+        <span class="statMoney">
+          💰 $<span id="moneyValue">10000</span>
+        </span>
 
-    <canvas
-      id="gameCanvas"
-    ></canvas>
-
-
-    <!-- TOP UI -->
-
-    <div class="game-top-ui">
-
-      <div class="game-info">
-
-        👤
-        <strong id="worldPlayerName">
-          Player
-        </strong>
-
-        <br>
-
-        💰
-        $<span id="worldMoney">
-          0
+        <span class="statEnergy">
+          ⚡ <span id="energyValue">100</span>
         </span>
 
       </div>
 
-      <button
-        class="exit-game"
-        onclick="exitWorld()"
-      >
-        ☰ Menu
-      </button>
-
     </div>
 
+    <div class="hudBox">
 
-    <!-- JOYSTICK -->
-
-    <div id="joystick">
-
-      <div
-        id="joystickKnob"
-      ></div>
-
-    </div>
-
-
-    <!-- CAMERA -->
-
-    <div class="camera-buttons">
-
-      <button
-        onclick="rotateCamera(-1)"
-      >
-        ◀
+      <button id="logoutBtn" onclick="logout()">
+        Logout
       </button>
 
-      <button
-        onclick="resetCamera()"
-      >
-        🎥
-      </button>
-
-      <button
-        onclick="rotateCamera(1)"
-      >
-        ▶
-      </button>
-
-    </div>
-
-
-    <div class="controls-help">
-      WASD / Arrow Keys = Move
     </div>
 
   </div>
 
-</section>
 
+  <!-- NOTIFICATION -->
+
+  <div id="notification"></div>
+
+
+  <!-- INTERACTION -->
+
+  <div id="interactionBox">
+
+    <div id="interactionTitle">
+      Village
+    </div>
+
+    <div id="interactionText">
+      Interaction
+    </div>
+
+    <div class="actionRow" id="actionRow"></div>
+
+  </div>
+
+
+  <!-- JOYSTICK -->
+
+  <div id="joystick">
+    <div id="joystickKnob"></div>
+  </div>
+
+
+  <!-- CAMERA -->
+
+  <div id="cameraControls">
+
+    <button class="cameraBtn" onclick="rotateCamera(-1)">
+      ↶
+    </button>
+
+    <button class="cameraBtn" onclick="resetCamera()">
+      🎥
+    </button>
+
+    <button class="cameraBtn" onclick="rotateCamera(1)">
+      ↷
+    </button>
+
+    <button class="cameraBtn" onclick="toggleHelp()">
+      ?
+    </button>
+
+  </div>
+
+
+  <div id="bottomInfo">
+    Move with joystick • Walk near objects to interact
+  </div>
+
+
+  <!-- HELP -->
+
+  <div id="help">
+
+    <h2>🌾 Village Controls</h2>
+
+    <p>
+      Use the joystick to move your character around the village.
+      Walk close to villagers, the shop, farm or houses to interact.
+    </p>
+
+    <p style="margin-top:10px;">
+      🧑 NPC → Talk<br>
+      🏪 Shop → Buy/Sell<br>
+      🌾 Farm → Plant & Harvest<br>
+      🏠 House → Rest
+    </p>
+
+    <button id="closeHelp" onclick="toggleHelp()">
+      Close
+    </button>
+
+  </div>
 
 </div>
 
@@ -634,319 +607,267 @@ p{
 const SUPABASE_URL =
   "https://gkhbsqihmktxfewdvytg.supabase.co";
 
-const SUPABASE_PUBLISHABLE_KEY =
+const SUPABASE_KEY =
   "sb_publishable_mCmmD_Z-08BjfDNWfeY9AA_Wc9WxgAQ";
 
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
+    SUPABASE_KEY
   );
 
 
 /* =========================================================
-   GLOBAL
+   GAME STATE
 ========================================================= */
 
-let currentPlayer = null;
+let currentUser = null;
+
+let playerData = {
+  name:"Player",
+  city:"Village",
+  goal:"Farmer",
+  money:10000,
+  energy:100
+};
+
+let scene;
+let camera;
+let renderer;
+let player;
+
+let villageObjects = [];
+let npcs = [];
+
+let gameRunning = false;
+
+let cameraAngle = 0;
+
+let joystickX = 0;
+let joystickY = 0;
+
+let keys = {};
+
+let nearbyObject = null;
+
+let farmState = {
+  planted:false,
+  growing:false,
+  ready:false,
+  timer:null
+};
 
 
 /* =========================================================
-   BASIC HELPERS
-========================================================= */
-
-function getElement(id){
-
-  return document.getElementById(id);
-
-}
-
-
-function hideAllScreens(){
-
-  getElement("loginScreen")
-    .classList.add("hidden");
-
-  getElement("signupScreen")
-    .classList.add("hidden");
-
-  getElement("characterScreen")
-    .classList.add("hidden");
-
-  getElement("gameScreen")
-    .classList.add("hidden");
-
-}
-
-
-function showLogin(){
-
-  hideAllScreens();
-
-  getElement("loginScreen")
-    .classList.remove("hidden");
-
-}
-
-
-function showSignup(){
-
-  hideAllScreens();
-
-  getElement("signupScreen")
-    .classList.remove("hidden");
-
-}
-
-
-function showMessage(
-  id,
-  message,
-  success=false
-){
-
-  const el =
-    getElement(id);
-
-  if(!el){
-    return;
-  }
-
-  el.textContent =
-    message;
-
-  el.className =
-    success
-      ? "message success"
-      : "message error";
-
-}
-
-
-/* =========================================================
-   SIGNUP
+   AUTH
 ========================================================= */
 
 async function signup(){
 
   const email =
-    getElement("signupEmail")
-      .value
-      .trim();
+    document.getElementById("loginEmail").value.trim();
 
   const password =
-    getElement("signupPassword")
-      .value;
+    document.getElementById("loginPassword").value;
+
+  const status =
+    document.getElementById("loginStatus");
 
   if(!email || !password){
 
-    showMessage(
-      "signupMessage",
-      "Email aur password enter karo."
-    );
+    status.textContent =
+      "Email and password required.";
 
     return;
-
   }
 
-  if(password.length < 6){
+  status.textContent = "Creating account...";
 
-    showMessage(
-      "signupMessage",
-      "Password kam az kam 6 characters ka ho."
-    );
+  try{
 
-    return;
+    const {data,error} =
+      await supabaseClient.auth.signUp({
+        email,
+        password
+      });
 
-  }
+    if(error){
+      status.textContent = error.message;
+      return;
+    }
 
-  showMessage(
-    "signupMessage",
-    "Account create ho raha hai...",
-    true
-  );
+    status.textContent =
+      "Account created. Check your email if confirmation is required.";
 
-  const {
-    error
-  } =
-    await supabaseClient.auth.signUp({
+  }catch(error){
 
-      email,
-      password
-
-    });
-
-  if(error){
-
-    showMessage(
-      "signupMessage",
-      error.message
-    );
-
-    return;
+    status.textContent =
+      error.message;
 
   }
-
-  showMessage(
-    "signupMessage",
-    "Account create ho gaya. Ab login karo.",
-    true
-  );
 
 }
 
-
-/* =========================================================
-   LOGIN
-========================================================= */
 
 async function login(){
 
   const email =
-    getElement("loginEmail")
-      .value
-      .trim();
+    document.getElementById("loginEmail").value.trim();
 
   const password =
-    getElement("loginPassword")
-      .value;
+    document.getElementById("loginPassword").value;
+
+  const status =
+    document.getElementById("loginStatus");
 
   if(!email || !password){
 
-    showMessage(
-      "loginMessage",
-      "Email aur password enter karo."
-    );
+    status.textContent =
+      "Email and password required.";
 
     return;
-
   }
 
-  showMessage(
-    "loginMessage",
-    "Login ho raha hai...",
-    true
-  );
+  status.textContent = "Logging in...";
 
-  const {
-    error
-  } =
-    await supabaseClient.auth
-      .signInWithPassword({
+  try{
 
+    const {data,error} =
+      await supabaseClient.auth.signInWithPassword({
         email,
         password
-
       });
 
-  if(error){
+    if(error){
 
-    showMessage(
-      "loginMessage",
-      error.message
-    );
+      status.textContent =
+        error.message;
 
+      return;
+    }
+
+    currentUser = data.user;
+
+    await loadPlayer();
+
+  }catch(error){
+
+    status.textContent =
+      error.message;
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD PLAYER
+========================================================= */
+
+async function loadPlayer(){
+
+  if(!currentUser){
+
+    showLogin();
     return;
 
   }
 
-  await loadPlayer();
+  try{
 
-}
+    const {data,error} =
+      await supabaseClient
+        .from("players")
+        .select("*")
+        .eq("id",currentUser.id)
+        .maybeSingle();
 
+    if(error){
 
-/* =========================================================
-   CURRENT USER
-========================================================= */
+      console.log(error);
 
-async function getCurrentUser(){
+      showCharacter();
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.getUser();
+      return;
 
-  if(error){
-    return null;
+    }
+
+    if(!data){
+
+      showCharacter();
+
+      return;
+
+    }
+
+    playerData = {
+
+      ...playerData,
+
+      ...data,
+
+      money:
+        Number(data.money ?? 10000)
+
+    };
+
+    showGame();
+
+  }catch(error){
+
+    console.log(error);
+
+    showCharacter();
+
   }
 
-  return data.user;
-
 }
 
 
 /* =========================================================
-   CREATE CHARACTER
+   CHARACTER
 ========================================================= */
 
 async function createCharacter(){
 
-  const user =
-    await getCurrentUser();
-
-  if(!user){
-
-    showLogin();
-
-    return;
-
-  }
-
   const name =
-    getElement("playerName")
-      .value
-      .trim();
-
-  const age =
-    parseInt(
-      getElement("playerAge").value
-    );
+    document
+      .getElementById("characterName")
+      .value.trim();
 
   const city =
-    getElement("playerCity").value;
+    document
+      .getElementById("characterCity")
+      .value.trim();
 
   const goal =
-    getElement("playerGoal").value;
+    document
+      .getElementById("characterGoal")
+      .value;
 
+  const status =
+    document.getElementById("characterStatus");
 
   if(!name){
 
-    showMessage(
-      "characterMessage",
-      "Character name enter karo."
-    );
+    status.textContent =
+      "Please enter your name.";
 
     return;
-
   }
 
+  status.textContent =
+    "Creating character...";
 
-  if(
-    !age ||
-    age < 10 ||
-    age > 100
-  ){
+  const newPlayer = {
 
-    showMessage(
-      "characterMessage",
-      "Age 10 se 100 ke darmiyan honi chahiye."
-    );
-
-    return;
-
-  }
-
-
-  const playerData = {
-
-    id:user.id,
+    id:currentUser.id,
 
     name:name,
 
-    age:age,
+    age:18,
 
-    city:city,
+    city:city || "Village",
 
     goal:goal,
 
@@ -972,127 +893,94 @@ async function createCharacter(){
 
   };
 
+  try{
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("players")
-      .insert(playerData)
-      .select()
-      .single();
+    const {data,error} =
+      await supabaseClient
+        .from("players")
+        .insert(newPlayer)
+        .select()
+        .single();
 
+    if(error){
 
-  if(error){
+      status.textContent =
+        error.message;
 
-    showMessage(
-      "characterMessage",
-      error.message
-    );
+      return;
 
-    return;
+    }
+
+    playerData = {
+      ...playerData,
+      ...data
+    };
+
+    showGame();
+
+  }catch(error){
+
+    status.textContent =
+      error.message;
 
   }
-
-
-  currentPlayer =
-    data;
-
-
-  showGame();
 
 }
 
 
 /* =========================================================
-   LOAD PLAYER
+   SCREEN FUNCTIONS
 ========================================================= */
 
-async function loadPlayer(){
+function showLogin(){
 
-  const user =
-    await getCurrentUser();
+  document
+    .getElementById("loginScreen")
+    .classList.remove("hidden");
 
-  if(!user){
+  document
+    .getElementById("characterScreen")
+    .classList.add("hidden");
 
-    showLogin();
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("players")
-      .select("*")
-      .eq(
-        "id",
-        user.id
-      )
-      .maybeSingle();
-
-
-  if(error){
-
-    showMessage(
-      "loginMessage",
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  if(!data){
-
-    hideAllScreens();
-
-    getElement("characterScreen")
-      .classList.remove("hidden");
-
-    return;
-
-  }
-
-
-  currentPlayer =
-    data;
-
-
-  showGame();
+  document
+    .getElementById("gameScreen")
+    .classList.add("hidden");
 
 }
 
 
-/* =========================================================
-   SHOW GAME
-========================================================= */
+function showCharacter(){
+
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("characterScreen")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("gameScreen")
+    .classList.add("hidden");
+
+}
+
 
 function showGame(){
 
-  hideAllScreens();
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
 
-  getElement("gameScreen")
+  document
+    .getElementById("characterScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("gameScreen")
     .classList.remove("hidden");
 
-
-  getElement("worldPlayerName")
-    .textContent =
-    currentPlayer?.name || "Player";
-
-
-  getElement("worldMoney")
-    .textContent =
-    Number(
-      currentPlayer?.money || 0
-    ).toLocaleString();
-
+  updateHUD();
 
   startVillageWorld();
 
@@ -1100,126 +988,93 @@ function showGame(){
 
 
 /* =========================================================
-   EXIT WORLD
+   HUD
 ========================================================= */
 
-function exitWorld(){
+function updateHUD(){
 
-  /*
-    Step 1 mein menu sirf world se bahar
-    aane ke liye hai.
-  */
+  document.getElementById("hudName")
+    .textContent =
+      "👨‍🌾 " +
+      (playerData.name || "Player");
 
-  if(
-    confirm(
-      "Village se bahar nikal kar login screen par jana hai?"
-    )
-  ){
+  document.getElementById("moneyValue")
+    .textContent =
+      Math.floor(
+        Number(playerData.money || 0)
+      );
 
-    logout();
-
-  }
+  document.getElementById("energyValue")
+    .textContent =
+      Math.floor(
+        Number(playerData.energy ?? 100)
+      );
 
 }
 
 
 /* =========================================================
-   LOGOUT
+   NOTIFICATION
 ========================================================= */
 
-async function logout(){
+let notificationTimer;
 
-  await supabaseClient
-    .auth
-    .signOut();
+function notify(message){
 
-  currentPlayer =
-    null;
+  const box =
+    document.getElementById("notification");
 
-  stopVillageWorld();
+  box.textContent = message;
 
-  showLogin();
+  box.classList.add("show");
+
+  clearTimeout(notificationTimer);
+
+  notificationTimer =
+    setTimeout(()=>{
+
+      box.classList.remove("show");
+
+    },2200);
 
 }
 
 
 /* =========================================================
-   THREE.JS VILLAGE WORLD
-========================================================= */
-
-let scene;
-
-let camera;
-
-let renderer;
-
-let player;
-
-let clock;
-
-let animationFrame;
-
-let worldStarted = false;
-
-let cameraAngle = 0;
-
-let joystickActive = false;
-
-let joystickX = 0;
-
-let joystickY = 0;
-
-const keys = {};
-
-
-/* =========================================================
-   START WORLD
+   THREE.JS WORLD
 ========================================================= */
 
 function startVillageWorld(){
 
-  if(worldStarted){
-
-    updateWorldUI();
-
+  if(gameRunning)
     return;
 
-  }
+  gameRunning = true;
 
+  const container =
+    document.getElementById("gameWorld");
 
-  worldStarted = true;
-
-
-  const canvas =
-    getElement("gameCanvas");
-
-  const world =
-    getElement("gameWorld");
-
+  container.innerHTML = "";
 
   scene =
     new THREE.Scene();
 
-
   scene.background =
-    new THREE.Color(
-      0x87ceeb
-    );
-
+    new THREE.Color(0x83c9ef);
 
   scene.fog =
     new THREE.Fog(
-      0x87ceeb,
-      40,
-      180
+      0x83c9ef,
+      70,
+      210
     );
 
 
   camera =
     new THREE.PerspectiveCamera(
       60,
-      world.clientWidth /
-      world.clientHeight,
+      window.innerWidth /
+      window.innerHeight,
       0.1,
       500
     );
@@ -1227,55 +1082,32 @@ function startVillageWorld(){
 
   renderer =
     new THREE.WebGLRenderer({
-
-      canvas:canvas,
-
-      antialias:true,
-
-      powerPreference:
-        "high-performance"
-
+      antialias:true
     });
 
-
   renderer.setPixelRatio(
-    Math.min(
-      window.devicePixelRatio,
-      1.5
-    )
+    Math.min(window.devicePixelRatio,2)
   );
-
 
   renderer.setSize(
-    world.clientWidth,
-    world.clientHeight,
-    false
+    window.innerWidth,
+    window.innerHeight
+  );
+
+  renderer.shadowMap.enabled = true;
+
+  container.appendChild(
+    renderer.domElement
   );
 
 
-  renderer.shadowMap.enabled =
-    true;
+  createLights();
 
-
-  clock =
-    new THREE.Clock();
-
-
-  createLighting();
-
-  createGround();
-
-  createRoads();
-
-  createVillageHouses();
-
-  createTrees();
-
-  createFarms();
+  createWorld();
 
   createPlayer();
 
-  createVillageDetails();
+  createNPCs();
 
   setupKeyboard();
 
@@ -1283,37 +1115,40 @@ function startVillageWorld(){
 
   window.addEventListener(
     "resize",
-    resizeWorld
+    resizeGame
   );
 
+  animate();
 
-  getElement("worldLoading")
-    .classList.add("hidden");
+}
 
 
-  updateWorldUI();
+function stopVillageWorld(){
 
-  animateWorld();
+  gameRunning = false;
+
+  window.removeEventListener(
+    "resize",
+    resizeGame
+  );
 
 }
 
 
 /* =========================================================
-   LIGHTING
+   LIGHTS
 ========================================================= */
 
-function createLighting(){
+function createLights(){
 
-  const ambient =
+  const hemi =
     new THREE.HemisphereLight(
       0xffffff,
-      0x557755,
+      0x4c6b42,
       2
     );
 
-  scene.add(
-    ambient
-  );
+  scene.add(hemi);
 
 
   const sun =
@@ -1322,27 +1157,60 @@ function createLighting(){
       2
     );
 
-
   sun.position.set(
-    50,
+    40,
     80,
     30
   );
 
+  sun.castShadow = true;
 
-  sun.castShadow =
-    true;
+  sun.shadow.mapSize.width = 2048;
+  sun.shadow.mapSize.height = 2048;
 
+  scene.add(sun);
 
-  sun.shadow.mapSize.width =
-    1024;
-
-  sun.shadow.mapSize.height =
-    1024;
+}
 
 
-  scene.add(
-    sun
+/* =========================================================
+   WORLD
+========================================================= */
+
+function createWorld(){
+
+  createGround();
+
+  createRoad(0,0,220,10);
+
+  createRoad(0,0,10,220);
+
+  createRoad(0,-45,220,7);
+
+  createRoad(45,0,7,220);
+
+  createVillageHouses();
+
+  createTrees();
+
+  createFarm(
+    -38,
+    -35
+  );
+
+  createShop(
+    35,
+    -35
+  );
+
+  createWell(
+    -28,
+    15
+  );
+
+  createMarket(
+    35,
+    30
   );
 
 }
@@ -1354,37 +1222,29 @@ function createLighting(){
 
 function createGround(){
 
-  const geometry =
+  const geo =
     new THREE.PlaneGeometry(
       220,
       220
     );
 
-
-  const material =
+  const mat =
     new THREE.MeshStandardMaterial({
-      color:0x4f8f45
+      color:0x62a84f
     });
-
 
   const ground =
     new THREE.Mesh(
-      geometry,
-      material
+      geo,
+      mat
     );
-
 
   ground.rotation.x =
     -Math.PI / 2;
 
+  ground.receiveShadow = true;
 
-  ground.receiveShadow =
-    true;
-
-
-  scene.add(
-    ground
-  );
+  scene.add(ground);
 
 }
 
@@ -1400,116 +1260,33 @@ function createRoad(
   depth
 ){
 
-  const geometry =
+  const geo =
     new THREE.BoxGeometry(
       width,
-      0.08,
+      .08,
       depth
     );
 
-
-  const material =
+  const mat =
     new THREE.MeshStandardMaterial({
-      color:0x555555
+      color:0x857967
     });
-
 
   const road =
     new THREE.Mesh(
-      geometry,
-      material
+      geo,
+      mat
     );
-
 
   road.position.set(
     x,
-    0.04,
+    .04,
     z
   );
 
+  road.receiveShadow = true;
 
-  scene.add(
-    road
-  );
-
-
-  /*
-    Road center line
-  */
-
-  const lineGeometry =
-    new THREE.BoxGeometry(
-      width > depth
-        ? width
-        : 0.12,
-
-      0.1,
-
-      width > depth
-        ? 0.12
-        : depth
-    );
-
-
-  const lineMaterial =
-    new THREE.MeshBasicMaterial({
-      color:0xffd84d
-    });
-
-
-  const line =
-    new THREE.Mesh(
-      lineGeometry,
-      lineMaterial
-    );
-
-
-  line.position.set(
-    x,
-    0.1,
-    z
-  );
-
-
-  scene.add(
-    line
-  );
-
-}
-
-
-function createRoads(){
-
-  createRoad(
-    0,
-    0,
-    220,
-    8
-  );
-
-
-  createRoad(
-    0,
-    0,
-    8,
-    220
-  );
-
-
-  createRoad(
-    0,
-    35,
-    120,
-    5
-  );
-
-
-  createRoad(
-    45,
-    0,
-    5,
-    100
-  );
+  scene.add(road);
 
 }
 
@@ -1521,184 +1298,85 @@ function createRoads(){
 function createHouse(
   x,
   z,
-  color
+  color,
+  label
 ){
 
   const group =
     new THREE.Group();
 
 
-  /*
-    House body
-  */
-
-  const bodyGeometry =
-    new THREE.BoxGeometry(
-      9,
-      5,
-      8
-    );
-
-
-  const bodyMaterial =
-    new THREE.MeshStandardMaterial({
-      color:color
-    });
-
-
   const body =
     new THREE.Mesh(
-      bodyGeometry,
-      bodyMaterial
+
+      new THREE.BoxGeometry(
+        10,
+        6,
+        9
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:color
+      })
+
     );
 
+  body.position.y = 3;
 
-  body.position.y =
-    2.5;
+  body.castShadow = true;
 
+  body.receiveShadow = true;
 
-  body.castShadow =
-    true;
-
-
-  body.receiveShadow =
-    true;
-
-
-  group.add(
-    body
-  );
-
-
-  /*
-    Roof
-  */
-
-  const roofGeometry =
-    new THREE.ConeGeometry(
-      7,
-      4,
-      4
-    );
-
-
-  const roofMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0x8b4513
-    });
+  group.add(body);
 
 
   const roof =
     new THREE.Mesh(
-      roofGeometry,
-      roofMaterial
+
+      new THREE.ConeGeometry(
+        7.5,
+        4,
+        4
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x7b3025
+      })
+
     );
 
-
-  roof.position.y =
-    7;
-
+  roof.position.y = 8;
 
   roof.rotation.y =
     Math.PI / 4;
 
+  roof.castShadow = true;
 
-  roof.castShadow =
-    true;
-
-
-  group.add(
-    roof
-  );
-
-
-  /*
-    Door
-  */
-
-  const doorGeometry =
-    new THREE.BoxGeometry(
-      1.6,
-      2.8,
-      0.25
-    );
-
-
-  const doorMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0x3b2415
-    });
+  group.add(roof);
 
 
   const door =
     new THREE.Mesh(
-      doorGeometry,
-      doorMaterial
-    );
 
+      new THREE.BoxGeometry(
+        2,
+        3,
+        .3
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x40261a
+      })
+
+    );
 
   door.position.set(
     0,
-    1.4,
-    4.05
+    1.5,
+    4.6
   );
 
-
-  group.add(
-    door
-  );
-
-
-  /*
-    Windows
-  */
-
-  const windowGeometry =
-    new THREE.BoxGeometry(
-      1.5,
-      1.4,
-      0.2
-    );
-
-
-  const windowMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0x9bdcff,
-      metalness:0.1,
-      roughness:0.2
-    });
-
-
-  const window1 =
-    new THREE.Mesh(
-      windowGeometry,
-      windowMaterial
-    );
-
-
-  window1.position.set(
-    -3,
-    3,
-    4.05
-  );
-
-
-  group.add(
-    window1
-  );
-
-
-  const window2 =
-    window1.clone();
-
-
-  window2.position.x =
-    3;
-
-
-  group.add(
-    window2
-  );
+  group.add(door);
 
 
   group.position.set(
@@ -1707,73 +1385,66 @@ function createHouse(
     z
   );
 
+  scene.add(group);
 
-  scene.add(
-    group
-  );
+  villageObjects.push({
+
+    type:"house",
+
+    name:label,
+
+    object:group,
+
+    x:x,
+
+    z:z,
+
+    radius:10
+
+  });
 
 }
 
 
 /* =========================================================
-   VILLAGE HOUSES
+   HOUSES
 ========================================================= */
 
 function createVillageHouses(){
 
   createHouse(
     -25,
-    -20,
-    0xe0b070
+    -5,
+    0xe6b85c,
+    "Your House"
   );
-
-
-  createHouse(
-    -45,
-    -20,
-    0xd8c090
-  );
-
 
   createHouse(
     25,
-    -22,
-    0xd89b72
+    -5,
+    0xc98f67,
+    "Village House"
   );
-
-
-  createHouse(
-    45,
-    -22,
-    0xe5c07b
-  );
-
 
   createHouse(
     -25,
-    20,
-    0xcaa574
+    40,
+    0xd8d8d8,
+    "Farmer House"
   );
-
 
   createHouse(
     25,
-    20,
-    0xd2a679
-  );
-
-
-  createHouse(
-    55,
-    25,
-    0xb98c70
+    45,
+    0xd19a9b,
+    "Worker House"
   );
 
 }
 
 
 /* =========================================================
-   TREE
+   TREES
 ========================================================= */
 
 function createTree(
@@ -1785,73 +1456,49 @@ function createTree(
     new THREE.Group();
 
 
-  const trunkGeometry =
-    new THREE.CylinderGeometry(
-      0.6,
-      0.8,
-      4,
-      8
-    );
-
-
-  const trunkMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0x6b4423
-    });
-
-
   const trunk =
     new THREE.Mesh(
-      trunkGeometry,
-      trunkMaterial
+
+      new THREE.CylinderGeometry(
+        .7,
+        .9,
+        4,
+        8
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x70411f
+      })
+
     );
 
+  trunk.position.y = 2;
 
-  trunk.position.y =
-    2;
+  trunk.castShadow = true;
 
-
-  trunk.castShadow =
-    true;
-
-
-  group.add(
-    trunk
-  );
-
-
-  const leavesGeometry =
-    new THREE.SphereGeometry(
-      3.2,
-      10,
-      10
-    );
-
-
-  const leavesMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0x236b32
-    });
+  group.add(trunk);
 
 
   const leaves =
     new THREE.Mesh(
-      leavesGeometry,
-      leavesMaterial
+
+      new THREE.SphereGeometry(
+        3.2,
+        12,
+        10
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x2e803b
+      })
+
     );
 
+  leaves.position.y = 6;
 
-  leaves.position.y =
-    5.2;
+  leaves.castShadow = true;
 
-
-  leaves.castShadow =
-    true;
-
-
-  group.add(
-    leaves
-  );
+  group.add(leaves);
 
 
   group.position.set(
@@ -1860,54 +1507,41 @@ function createTree(
     z
   );
 
-
-  scene.add(
-    group
-  );
+  scene.add(group);
 
 }
 
-
-/* =========================================================
-   TREES
-========================================================= */
 
 function createTrees(){
 
   const positions = [
 
-    [-70,-60],
-    [-55,-55],
-    [-40,-65],
-    [-15,-60],
-    [20,-65],
-    [50,-60],
-    [70,-45],
+    [-70,-70],
+    [-55,-65],
+    [-80,-40],
+    [-65,25],
+    [-75,60],
+    [-50,70],
 
-    [-70,50],
-    [-60,65],
-    [-40,55],
-    [35,55],
-    [60,60],
-    [75,35],
+    [65,-70],
+    [80,-60],
+    [70,-25],
+    [80,15],
+    [65,60],
+    [50,75],
 
-    [-85,10],
-    [85,5],
-    [-80,-30],
-    [80,-30]
+    [-10,-75],
+    [10,-75],
+    [-90,0],
+    [90,0]
 
   ];
 
-
   positions.forEach(
-    position => {
-
-      createTree(
-        position[0],
-        position[1]
-      );
-
-    }
+    p => createTree(
+      p[0],
+      p[1]
+    )
   );
 
 }
@@ -1922,158 +1556,98 @@ function createFarm(
   z
 ){
 
-  const geometry =
-    new THREE.BoxGeometry(
-      25,
-      0.12,
-      18
-    );
+  const group =
+    new THREE.Group();
 
 
-  const material =
-    new THREE.MeshStandardMaterial({
-      color:0x7b4f28
-    });
-
-
-  const farm =
+  const base =
     new THREE.Mesh(
-      geometry,
-      material
+
+      new THREE.BoxGeometry(
+        28,
+        .2,
+        22
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x76532e
+      })
+
     );
 
+  base.position.y=.1;
 
-  farm.position.set(
-    x,
-    0.07,
-    z
-  );
+  group.add(base);
 
-
-  scene.add(
-    farm
-  );
-
-
-  /*
-    Crop rows
-  */
 
   for(
-    let i=-9;
-    i<=9;
-    i+=3
+    let row=0;
+    row<4;
+    row++
   ){
 
-    const cropGeometry =
-      new THREE.BoxGeometry(
-        20,
-        0.5,
-        0.7
+    for(
+      let col=0;
+      col<5;
+      col++
+    ){
+
+      const plant =
+        new THREE.Mesh(
+
+          new THREE.CylinderGeometry(
+            .12,
+            .2,
+            1.2,
+            6
+          ),
+
+          new THREE.MeshStandardMaterial({
+            color:0x3c8f36
+          })
+
+        );
+
+      plant.position.set(
+        -10 + col*5,
+        .7,
+        -7 + row*5
       );
 
+      plant.userData.plant =
+        true;
 
-    const cropMaterial =
-      new THREE.MeshStandardMaterial({
-        color:0x2e7d32
-      });
+      group.add(plant);
 
-
-    const crop =
-      new THREE.Mesh(
-        cropGeometry,
-        cropMaterial
-      );
-
-
-    crop.position.set(
-      x,
-      0.35,
-      z+i
-    );
-
-
-    scene.add(
-      crop
-    );
+    }
 
   }
 
-}
 
-
-function createFarms(){
-
-  createFarm(
-    -60,
-    25
+  group.position.set(
+    x,
+    0,
+    z
   );
 
-
-  createFarm(
-    60,
-    -5
-  );
-
-}
+  scene.add(group);
 
 
-/* =========================================================
-   VILLAGE DETAILS
-========================================================= */
+  villageObjects.push({
 
-function createVillageDetails(){
+    type:"farm",
 
-  /*
-    Well
-  */
+    name:"Village Farm",
 
-  const wellGeometry =
-    new THREE.CylinderGeometry(
-      3,
-      3,
-      1.5,
-      16
-    );
+    object:group,
 
+    x:x,
 
-  const wellMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0x777777
-    });
+    z:z,
 
+    radius:16
 
-  const well =
-    new THREE.Mesh(
-      wellGeometry,
-      wellMaterial
-    );
-
-
-  well.position.set(
-    12,
-    0.75,
-    10
-  );
-
-
-  well.castShadow =
-    true;
-
-
-  scene.add(
-    well
-  );
-
-
-  /*
-    Shop
-  */
-
-  createShop(
-    18,
-    -10
-  );
+  });
 
 }
 
@@ -2087,74 +1661,263 @@ function createShop(
   z
 ){
 
-  const bodyGeometry =
-    new THREE.BoxGeometry(
-      10,
-      5,
-      8
-    );
+  const group =
+    new THREE.Group();
 
 
-  const bodyMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0x3b82f6
-    });
-
-
-  const body =
+  const building =
     new THREE.Mesh(
-      bodyGeometry,
-      bodyMaterial
+
+      new THREE.BoxGeometry(
+        13,
+        7,
+        11
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0xd89b3d
+      })
+
     );
 
+  building.position.y=3.5;
 
-  body.position.set(
-    x,
-    2.5,
-    z
-  );
+  building.castShadow=true;
 
-
-  body.castShadow =
-    true;
+  group.add(building);
 
 
-  scene.add(
-    body
-  );
+  const roof =
+    new THREE.Mesh(
 
+      new THREE.ConeGeometry(
+        9,
+        4,
+        4
+      ),
 
-  const signGeometry =
-    new THREE.BoxGeometry(
-      7,
-      1.5,
-      0.3
+      new THREE.MeshStandardMaterial({
+        color:0x8c2727
+      })
+
     );
 
+  roof.position.y=9;
 
-  const signMaterial =
-    new THREE.MeshBasicMaterial({
-      color:0xffd700
-    });
+  roof.rotation.y=
+    Math.PI/4;
+
+  group.add(roof);
 
 
   const sign =
     new THREE.Mesh(
-      signGeometry,
-      signMaterial
+
+      new THREE.BoxGeometry(
+        8,
+        2,
+        .3
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0xf2d34b
+      })
+
     );
 
-
   sign.position.set(
+    0,
+    6,
+    5.7
+  );
+
+  group.add(sign);
+
+
+  group.position.set(
     x,
-    5.5,
-    z+4.1
+    0,
+    z
   );
 
+  scene.add(group);
 
-  scene.add(
-    sign
+
+  villageObjects.push({
+
+    type:"shop",
+
+    name:"Village Shop",
+
+    object:group,
+
+    x:x,
+
+    z:z,
+
+    radius:13
+
+  });
+
+}
+
+
+/* =========================================================
+   WELL
+========================================================= */
+
+function createWell(
+  x,
+  z
+){
+
+  const base =
+    new THREE.Mesh(
+
+      new THREE.CylinderGeometry(
+        3,
+        3,
+        2,
+        16
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x777777
+      })
+
+    );
+
+  base.position.set(
+    x,
+    1,
+    z
   );
+
+  base.castShadow=true;
+
+  scene.add(base);
+
+
+  const roof =
+    new THREE.Mesh(
+
+      new THREE.ConeGeometry(
+        4,
+        3,
+        4
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x5c3b25
+      })
+
+    );
+
+  roof.position.set(
+    x,
+    5,
+    z
+  );
+
+  scene.add(roof);
+
+
+  villageObjects.push({
+
+    type:"well",
+
+    name:"Village Well",
+
+    object:base,
+
+    x:x,
+
+    z:z,
+
+    radius:7
+
+  });
+
+}
+
+
+/* =========================================================
+   MARKET
+========================================================= */
+
+function createMarket(
+  x,
+  z
+){
+
+  const group =
+    new THREE.Group();
+
+
+  const table =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+        14,
+        2,
+        7
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x8c572c
+      })
+
+    );
+
+  table.position.y=1;
+
+  group.add(table);
+
+
+  const roof =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+        16,
+        .5,
+        9
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x3873a5
+      })
+
+    );
+
+  roof.position.y=7;
+
+  group.add(roof);
+
+
+  group.position.set(
+    x,
+    0,
+    z
+  );
+
+  scene.add(group);
+
+
+  villageObjects.push({
+
+    type:"market",
+
+    name:"Village Market",
+
+    object:group,
+
+    x:x,
+
+    z:z,
+
+    radius:12
+
+  });
 
 }
 
@@ -2169,100 +1932,191 @@ function createPlayer(){
     new THREE.Group();
 
 
-  /*
-    Body
-  */
-
-  const bodyGeometry =
-    new THREE.CapsuleGeometry(
-      0.8,
-      1.8,
-      4,
-      8
-    );
-
-
-  const bodyMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0x2563eb
-    });
-
-
   const body =
     new THREE.Mesh(
-      bodyGeometry,
-      bodyMaterial
+
+      new THREE.CapsuleGeometry(
+        .8,
+        1.8,
+        4,
+        8
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0x2878c7
+      })
+
     );
 
+  body.position.y=1.5;
 
-  body.position.y =
-    1.5;
+  body.castShadow=true;
 
-
-  body.castShadow =
-    true;
-
-
-  player.add(
-    body
-  );
-
-
-  /*
-    Head
-  */
-
-  const headGeometry =
-    new THREE.SphereGeometry(
-      0.65,
-      16,
-      16
-    );
-
-
-  const headMaterial =
-    new THREE.MeshStandardMaterial({
-      color:0xf1c27d
-    });
+  player.add(body);
 
 
   const head =
     new THREE.Mesh(
-      headGeometry,
-      headMaterial
+
+      new THREE.SphereGeometry(
+        .65,
+        16,
+        12
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0xd89b73
+      })
+
     );
 
+  head.position.y=3.1;
 
-  head.position.y =
-    3.1;
+  head.castShadow=true;
 
-
-  head.castShadow =
-    true;
-
-
-  player.add(
-    head
-  );
+  player.add(head);
 
 
   player.position.set(
     0,
     0,
+    12
+  );
+
+  scene.add(player);
+
+
+  camera.position.set(
+    0,
+    7,
     10
   );
 
+}
 
-  scene.add(
-    player
+
+/* =========================================================
+   NPC
+========================================================= */
+
+function createNPC(
+  name,
+  x,
+  z,
+  shirtColor,
+  job
+){
+
+  const group =
+    new THREE.Group();
+
+
+  const body =
+    new THREE.Mesh(
+
+      new THREE.CapsuleGeometry(
+        .65,
+        1.5,
+        4,
+        8
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:shirtColor
+      })
+
+    );
+
+  body.position.y=1.3;
+
+  body.castShadow=true;
+
+  group.add(body);
+
+
+  const head =
+    new THREE.Mesh(
+
+      new THREE.SphereGeometry(
+        .55,
+        14,
+        10
+      ),
+
+      new THREE.MeshStandardMaterial({
+        color:0xc98e6a
+      })
+
+    );
+
+  head.position.y=2.65;
+
+  group.add(head);
+
+
+  group.position.set(
+    x,
+    0,
+    z
   );
 
+  scene.add(group);
 
-  /*
-    Camera starting position
-  */
 
-  updateCamera();
+  npcs.push({
+
+    type:"npc",
+
+    name:name,
+
+    job:job,
+
+    object:group,
+
+    x:x,
+
+    z:z,
+
+    radius:5
+
+  });
+
+}
+
+
+function createNPCs(){
+
+  createNPC(
+    "Ali",
+    -10,
+    5,
+    0x3498db,
+    "Farmer"
+  );
+
+  createNPC(
+    "Ahmed",
+    15,
+    -20,
+    0x27ae60,
+    "Shopkeeper"
+  );
+
+  createNPC(
+    "Usman",
+    -10,
+    32,
+    0xe67e22,
+    "Worker"
+  );
+
+  createNPC(
+    "Bilal",
+    45,
+    10,
+    0x9b59b6,
+    "Businessman"
+  );
 
 }
 
@@ -2275,22 +2129,15 @@ function setupKeyboard(){
 
   window.addEventListener(
     "keydown",
-    event => {
-
-      keys[event.key.toLowerCase()] =
-        true;
-
+    e=>{
+      keys[e.key.toLowerCase()] = true;
     }
   );
 
-
   window.addEventListener(
     "keyup",
-    event => {
-
-      keys[event.key.toLowerCase()] =
-        false;
-
+    e=>{
+      keys[e.key.toLowerCase()] = false;
     }
   );
 
@@ -2304,11 +2151,12 @@ function setupKeyboard(){
 function setupJoystick(){
 
   const joystick =
-    getElement("joystick");
+    document.getElementById("joystick");
 
   const knob =
-    getElement("joystickKnob");
+    document.getElementById("joystickKnob");
 
+  let active=false;
 
   function updateJoystick(
     clientX,
@@ -2318,97 +2166,63 @@ function setupJoystick(){
     const rect =
       joystick.getBoundingClientRect();
 
-
     const centerX =
       rect.left +
-      rect.width / 2;
-
+      rect.width/2;
 
     const centerY =
       rect.top +
-      rect.height / 2;
-
+      rect.height/2;
 
     let dx =
-      clientX -
-      centerX;
-
+      clientX-centerX;
 
     let dy =
-      clientY -
-      centerY;
+      clientY-centerY;
 
-
-    const maxDistance =
-      42;
-
+    const max =
+      43;
 
     const distance =
       Math.sqrt(
-        dx*dx +
-        dy*dy
+        dx*dx + dy*dy
       );
 
-
-    if(distance > maxDistance){
+    if(distance>max){
 
       dx =
-        dx / distance *
-        maxDistance;
+        dx/distance*max;
 
       dy =
-        dy / distance *
-        maxDistance;
+        dy/distance*max;
 
     }
 
-
     joystickX =
-      dx / maxDistance;
+      dx/max;
 
     joystickY =
-      dy / maxDistance;
-
-
-    knob.style.transform =
-      `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-
-  }
-
-
-  function resetJoystick(){
-
-    joystickActive =
-      false;
-
-    joystickX =
-      0;
-
-    joystickY =
-      0;
-
+      dy/max;
 
     knob.style.transform =
-      "translate(-50%,-50%)";
+      `translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;
 
   }
 
 
   joystick.addEventListener(
     "pointerdown",
-    event => {
+    e=>{
 
-      joystickActive =
-        true;
+      active=true;
 
       joystick.setPointerCapture(
-        event.pointerId
+        e.pointerId
       );
 
-
       updateJoystick(
-        event.clientX,
-        event.clientY
+        e.clientX,
+        e.clientY
       );
 
     }
@@ -2417,18 +2231,14 @@ function setupJoystick(){
 
   joystick.addEventListener(
     "pointermove",
-    event => {
+    e=>{
 
-      if(
-        !joystickActive
-      ){
+      if(!active)
         return;
-      }
-
 
       updateJoystick(
-        event.clientX,
-        event.clientY
+        e.clientX,
+        e.clientY
       );
 
     }
@@ -2440,144 +2250,88 @@ function setupJoystick(){
     resetJoystick
   );
 
-
   joystick.addEventListener(
     "pointercancel",
     resetJoystick
   );
 
+
+  function resetJoystick(){
+
+    active=false;
+
+    joystickX=0;
+
+    joystickY=0;
+
+    knob.style.transform =
+      "translate(-50%,-50%)";
+
+  }
+
 }
 
 
 /* =========================================================
-   PLAYER MOVEMENT
+   MOVEMENT
 ========================================================= */
 
-function updatePlayer(
-  delta
-){
+function updatePlayer(){
 
-  if(!player){
+  if(!player)
     return;
-  }
 
 
-  let moveX =
-    0;
-
-  let moveZ =
-    0;
+  let x=0;
+  let z=0;
 
 
-  /*
-    Keyboard
-  */
+  if(keys["w"] || keys["arrowup"])
+    z -= 1;
 
-  if(
-    keys["w"] ||
-    keys["arrowup"]
-  ){
+  if(keys["s"] || keys["arrowdown"])
+    z += 1;
 
-    moveZ -= 1;
+  if(keys["a"] || keys["arrowleft"])
+    x -= 1;
 
-  }
-
-
-  if(
-    keys["s"] ||
-    keys["arrowdown"]
-  ){
-
-    moveZ += 1;
-
-  }
+  if(keys["d"] || keys["arrowright"])
+    x += 1;
 
 
-  if(
-    keys["a"] ||
-    keys["arrowleft"]
-  ){
+  x += joystickX;
 
-    moveX -= 1;
-
-  }
-
-
-  if(
-    keys["d"] ||
-    keys["arrowright"]
-  ){
-
-    moveX += 1;
-
-  }
-
-
-  /*
-    Mobile joystick
-  */
-
-  if(
-    joystickActive
-  ){
-
-    moveX =
-      joystickX;
-
-    moveZ =
-      joystickY;
-
-  }
+  z += joystickY;
 
 
   const length =
     Math.sqrt(
-      moveX*moveX +
-      moveZ*moveZ
+      x*x + z*z
     );
 
+  if(length>0){
 
-  if(length > 0.05){
-
-    moveX /=
-      length;
-
-    moveZ /=
-      length;
-
+    x/=length;
+    z/=length;
 
     const speed =
-      9;
-
+      0.16;
 
     player.position.x +=
-      moveX *
-      speed *
-      delta;
-
+      x*speed;
 
     player.position.z +=
-      moveZ *
-      speed *
-      delta;
+      z*speed;
 
-
-    /*
-      Face movement direction
-    */
 
     player.rotation.y =
       Math.atan2(
-        moveX,
-        moveZ
+        x,
+        z
       );
 
   }
 
-
-  /*
-    World boundaries
-  */
 
   player.position.x =
     THREE.MathUtils.clamp(
@@ -2586,16 +2340,12 @@ function updatePlayer(
       100
     );
 
-
   player.position.z =
     THREE.MathUtils.clamp(
       player.position.z,
       -100,
       100
     );
-
-
-  updateCamera();
 
 }
 
@@ -2606,80 +2356,709 @@ function updatePlayer(
 
 function updateCamera(){
 
-  if(!player || !camera){
+  if(!player)
     return;
-  }
 
 
-  const distance =
-    10;
+  const distance=9;
 
-
-  const height =
-    7;
-
-
-  const angle =
-    cameraAngle;
+  const height=6;
 
 
   const targetX =
-    player.position.x;
-
+    player.position.x +
+    Math.sin(cameraAngle)*distance;
 
   const targetZ =
-    player.position.z;
+    player.position.z +
+    Math.cos(cameraAngle)*distance;
 
 
-  camera.position.x =
-    targetX +
-    Math.sin(angle) *
-    distance;
+  camera.position.x +=
+    (targetX-camera.position.x)*0.08;
+
+  camera.position.z +=
+    (targetZ-camera.position.z)*0.08;
+
+  camera.position.y +=
+    (player.position.y+
+     height-
+     camera.position.y)*0.08;
 
 
-  camera.position.y =
-    player.position.y +
-    height;
-
-
-  camera.position.z =
-    targetZ +
-    Math.cos(angle) *
-    distance;
-
+  const lookTarget =
+    new THREE.Vector3(
+      player.position.x,
+      1.5,
+      player.position.z
+    );
 
   camera.lookAt(
-    player.position.x,
-    player.position.y + 1.5,
-    player.position.z
+    lookTarget
   );
 
 }
 
-
-/* =========================================================
-   CAMERA CONTROLS
-========================================================= */
 
 function rotateCamera(
   direction
 ){
 
   cameraAngle +=
-    direction *
-    0.35;
-
-  updateCamera();
+    direction*0.5;
 
 }
 
 
 function resetCamera(){
 
-  cameraAngle =
-    0;
+  cameraAngle=0;
 
-  updateCamera();
+}
+
+
+/* =========================================================
+   INTERACTION DETECTION
+========================================================= */
+
+function checkNearby(){
+
+  if(!player)
+    return;
+
+
+  let closest=null;
+
+  let closestDistance=Infinity;
+
+
+  villageObjects.forEach(
+    obj=>{
+
+      const dx =
+        player.position.x -
+        obj.x;
+
+      const dz =
+        player.position.z -
+        obj.z;
+
+      const distance =
+        Math.sqrt(
+          dx*dx+dz*dz
+        );
+
+      if(
+        distance < obj.radius &&
+        distance < closestDistance
+      ){
+
+        closest=obj;
+
+        closestDistance=
+          distance;
+
+      }
+
+    }
+  );
+
+
+  npcs.forEach(
+    npc=>{
+
+      const dx =
+        player.position.x -
+        npc.x;
+
+      const dz =
+        player.position.z -
+        npc.z;
+
+      const distance =
+        Math.sqrt(
+          dx*dx+dz*dz
+        );
+
+      if(
+        distance<npc.radius &&
+        distance<closestDistance
+      ){
+
+        closest=npc;
+
+        closestDistance=
+          distance;
+
+      }
+
+    }
+  );
+
+
+  if(
+    closest &&
+    closest !== nearbyObject
+  ){
+
+    nearbyObject=closest;
+
+    showInteraction(
+      closest
+    );
+
+  }
+
+
+  if(
+    !closest &&
+    nearbyObject
+  ){
+
+    nearbyObject=null;
+
+    hideInteraction();
+
+  }
+
+}
+
+
+/* =========================================================
+   INTERACTION UI
+========================================================= */
+
+function showInteraction(
+  obj
+){
+
+  const box =
+    document.getElementById(
+      "interactionBox"
+    );
+
+  const title =
+    document.getElementById(
+      "interactionTitle"
+    );
+
+  const text =
+    document.getElementById(
+      "interactionText"
+    );
+
+  const actions =
+    document.getElementById(
+      "actionRow"
+    );
+
+
+  box.style.display="block";
+
+  actions.innerHTML="";
+
+
+  if(obj.type==="npc"){
+
+    title.textContent =
+      "👤 " + obj.name;
+
+    text.textContent =
+      obj.job +
+      " • Talk to villager";
+
+
+    addAction(
+      "💬 Talk",
+      "actionBtn",
+      ()=>{
+        talkToNPC(obj);
+      }
+    );
+
+  }
+
+
+  else if(obj.type==="shop"){
+
+    title.textContent =
+      "🏪 Village Shop";
+
+    text.textContent =
+      "Buy useful items or sell your products.";
+
+
+    addAction(
+      "🍞 Buy Food $50",
+      "actionBtn",
+      buyFood
+    );
+
+    addAction(
+      "📦 Buy Seeds $100",
+      "actionBtn green",
+      buySeeds
+    );
+
+    addAction(
+      "💰 Sell Crop $150",
+      "actionBtn orange",
+      sellCrop
+    );
+
+  }
+
+
+  else if(obj.type==="farm"){
+
+    title.textContent =
+      "🌾 Village Farm";
+
+    if(
+      farmState.ready
+    ){
+
+      text.textContent =
+        "Your crop is ready.";
+
+      addAction(
+        "🌾 Harvest",
+        "actionBtn green",
+        harvestCrop
+      );
+
+    }
+
+    else if(
+      farmState.growing
+    ){
+
+      text.textContent =
+        "Your crop is growing...";
+
+    }
+
+    else{
+
+      text.textContent =
+        "Plant seeds and grow crops.";
+
+      addAction(
+        "🌱 Plant Seeds",
+        "actionBtn green",
+        plantCrop
+      );
+
+    }
+
+  }
+
+
+  else if(obj.type==="house"){
+
+    title.textContent =
+      "🏠 " + obj.name;
+
+    text.textContent =
+      "Rest here and recover energy.";
+
+    addAction(
+      "😴 Rest",
+      "actionBtn",
+      restAtHouse
+    );
+
+  }
+
+
+  else if(obj.type==="well"){
+
+    title.textContent =
+      "💧 Village Well";
+
+    text.textContent =
+      "Drink water and restore energy.";
+
+    addAction(
+      "💧 Drink",
+      "actionBtn",
+      drinkWater
+    );
+
+  }
+
+
+  else if(obj.type==="market"){
+
+    title.textContent =
+      "🛒 Village Market";
+
+    text.textContent =
+      "A busy place for village trade.";
+
+    addAction(
+      "📈 Trade",
+      "actionBtn orange",
+      marketTrade
+    );
+
+  }
+
+}
+
+
+function addAction(
+  text,
+  className,
+  callback
+){
+
+  const button =
+    document.createElement(
+      "button"
+    );
+
+  button.textContent=text;
+
+  button.className=
+    className;
+
+  button.onclick=callback;
+
+  document
+    .getElementById("actionRow")
+    .appendChild(button);
+
+}
+
+
+function hideInteraction(){
+
+  document
+    .getElementById(
+      "interactionBox"
+    )
+    .style.display="none";
+
+}
+
+
+/* =========================================================
+   NPC ACTION
+========================================================= */
+
+function talkToNPC(
+  npc
+){
+
+  const messages = {
+
+    Farmer:
+      "The crops are growing well this season.",
+
+    Shopkeeper:
+      "I have seeds and food for your journey.",
+
+    Worker:
+      "Hard work is the key to village success.",
+
+    Businessman:
+      "Buy low and sell high. That's business."
+
+  };
+
+  notify(
+    npc.name +
+    ": " +
+    (
+      messages[npc.job] ||
+      "Nice to meet you!"
+    )
+  );
+
+}
+
+
+/* =========================================================
+   SHOP ACTIONS
+========================================================= */
+
+function buyFood(){
+
+  const price=50;
+
+  if(
+    playerData.money <
+    price
+  ){
+
+    notify(
+      "❌ Not enough money."
+    );
+
+    return;
+
+  }
+
+  playerData.money -=
+    price;
+
+  playerData.energy =
+    Math.min(
+      100,
+      Number(playerData.energy ?? 100)+15
+    );
+
+  updateHUD();
+
+  notify(
+    "🍞 Food bought. Energy +15"
+  );
+
+}
+
+
+function buySeeds(){
+
+  const price=100;
+
+  if(
+    playerData.money <
+    price
+  ){
+
+    notify(
+      "❌ Not enough money."
+    );
+
+    return;
+
+  }
+
+  playerData.money -=
+    price;
+
+  updateHUD();
+
+  notify(
+    "🌱 Seeds purchased."
+  );
+
+}
+
+
+function sellCrop(){
+
+  if(
+    !farmState.ready
+  ){
+
+    notify(
+      "❌ You don't have a ready crop."
+    );
+
+    return;
+
+  }
+
+  playerData.money +=
+    150;
+
+  farmState.ready=false;
+
+  updateHUD();
+
+  notify(
+    "💰 Crop sold for $150!"
+  );
+
+}
+
+
+/* =========================================================
+   FARMING
+========================================================= */
+
+function plantCrop(){
+
+  if(
+    farmState.growing ||
+    farmState.ready
+  ){
+
+    notify(
+      "There is already a crop planted."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    playerData.money < 100
+  ){
+
+    notify(
+      "❌ Buy seeds from the shop first."
+    );
+
+    return;
+
+  }
+
+
+  playerData.money -=
+    100;
+
+  farmState.planted=true;
+
+  farmState.growing=true;
+
+  farmState.ready=false;
+
+  updateHUD();
+
+  notify(
+    "🌱 Crop planted!"
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      farmState.growing=false;
+
+      farmState.ready=true;
+
+      notify(
+        "🌾 Your crop is ready to harvest!"
+      );
+
+      if(nearbyObject)
+        showInteraction(
+          nearbyObject
+        );
+
+    },
+    15000
+  );
+
+}
+
+
+function harvestCrop(){
+
+  if(
+    !farmState.ready
+  ){
+
+    notify(
+      "Crop isn't ready yet."
+    );
+
+    return;
+
+  }
+
+
+  farmState.ready=false;
+
+  farmState.planted=false;
+
+  playerData.money +=
+    120;
+
+  updateHUD();
+
+  notify(
+    "🌾 Harvested! You earned $120."
+  );
+
+}
+
+
+/* =========================================================
+   HOUSE
+========================================================= */
+
+function restAtHouse(){
+
+  playerData.energy =
+    Math.min(
+      100,
+      Number(playerData.energy ?? 100)+30
+    );
+
+  updateHUD();
+
+  notify(
+    "😴 Rested. Energy +30"
+  );
+
+}
+
+
+/* =========================================================
+   WELL
+========================================================= */
+
+function drinkWater(){
+
+  playerData.energy =
+    Math.min(
+      100,
+      Number(playerData.energy ?? 100)+10
+    );
+
+  updateHUD();
+
+  notify(
+    "💧 Fresh water! Energy +10"
+  );
+
+}
+
+
+/* =========================================================
+   MARKET
+========================================================= */
+
+function marketTrade(){
+
+  const profit =
+    Math.floor(
+      Math.random()*100
+    ) + 50;
+
+  playerData.money +=
+    profit;
+
+  updateHUD();
+
+  notify(
+    "📈 Market trade profit: $" +
+    profit
+  );
+
+}
+
+
+/* =========================================================
+   HELP
+========================================================= */
+
+function toggleHelp(){
+
+  const help =
+    document.getElementById(
+      "help"
+    );
+
+  help.style.display =
+    help.style.display==="block"
+      ? "none"
+      : "block";
 
 }
 
@@ -2688,23 +3067,38 @@ function resetCamera(){
    ANIMATION
 ========================================================= */
 
-function animateWorld(){
+function animate(){
 
-  animationFrame =
-    requestAnimationFrame(
-      animateWorld
-    );
+  if(!gameRunning)
+    return;
 
-
-  const delta =
-    Math.min(
-      clock.getDelta(),
-      0.05
-    );
+  requestAnimationFrame(
+    animate
+  );
 
 
-  updatePlayer(
-    delta
+  updatePlayer();
+
+  updateCamera();
+
+  checkNearby();
+
+
+  /* Small NPC movement */
+
+  npcs.forEach(
+    npc=>{
+
+      if(
+        Math.random()<0.003
+      ){
+
+        npc.object.rotation.y +=
+          (Math.random()-.5);
+
+      }
+
+    }
   );
 
 
@@ -2720,148 +3114,79 @@ function animateWorld(){
    RESIZE
 ========================================================= */
 
-function resizeWorld(){
+function resizeGame(){
 
-  if(
-    !camera ||
-    !renderer
-  ){
+  if(!camera || !renderer)
     return;
-  }
-
-
-  const world =
-    getElement("gameWorld");
-
 
   camera.aspect =
-    world.clientWidth /
-    world.clientHeight;
-
+    window.innerWidth /
+    window.innerHeight;
 
   camera.updateProjectionMatrix();
 
-
   renderer.setSize(
-    world.clientWidth,
-    world.clientHeight,
-    false
+    window.innerWidth,
+    window.innerHeight
   );
 
 }
 
 
 /* =========================================================
-   WORLD UI
+   LOGOUT
 ========================================================= */
 
-function updateWorldUI(){
+async function logout(){
 
-  if(!currentPlayer){
-    return;
-  }
+  stopVillageWorld();
 
+  await supabaseClient.auth.signOut();
 
-  getElement("worldPlayerName")
-    .textContent =
-    currentPlayer.name;
+  currentUser=null;
 
-
-  getElement("worldMoney")
-    .textContent =
-    Number(
-      currentPlayer.money || 0
-    ).toLocaleString();
+  showLogin();
 
 }
-
-
-/* =========================================================
-   STOP WORLD
-========================================================= */
-
-function stopVillageWorld(){
-
-  if(animationFrame){
-
-    cancelAnimationFrame(
-      animationFrame
-    );
-
-    animationFrame =
-      null;
-
-  }
-
-
-  worldStarted =
-    false;
-
-
-  if(renderer){
-
-    renderer.dispose();
-
-  }
-
-
-  scene =
-    null;
-
-  camera =
-    null;
-
-  renderer =
-    null;
-
-  player =
-    null;
-
-}
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-supabaseClient.auth.onAuthStateChange(
-  async (
-    event,
-    session
-  ) => {
-
-    if(
-      event === "SIGNED_IN" &&
-      session
-    ){
-
-      await loadPlayer();
-
-    }
-
-  }
-);
 
 
 /* =========================================================
    START
 ========================================================= */
 
-async function startGame(){
+async function initialize(){
 
-  const {
-    data
-  } =
-    await supabaseClient
-      .auth
-      .getSession();
+  try{
+
+    const {
+      data:{
+        session
+      }
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
 
 
-  if(data.session){
+    if(
+      session &&
+      session.user
+    ){
 
-    await loadPlayer();
+      currentUser =
+        session.user;
 
-  }else{
+      await loadPlayer();
+
+    }else{
+
+      showLogin();
+
+    }
+
+  }catch(error){
+
+    console.log(error);
 
     showLogin();
 
@@ -2870,7 +3195,7 @@ async function startGame(){
 }
 
 
-startGame();
+initialize();
 
 </script>
 
